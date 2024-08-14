@@ -5,12 +5,13 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 export default function UserRout() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [isAuthenticated, SetIsAuthenticate] = useState<boolean>(false);
+  const [isAuthenticated, SetIsAuthenticate] = useState<boolean>(true);
 
 
   if (!isAuthenticated) {
     return <Navigate to="/" />
   }
+
   return (
 
 

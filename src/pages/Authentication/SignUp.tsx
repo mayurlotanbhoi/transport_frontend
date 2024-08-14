@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
-import { FaPhone } from 'react-icons/fa';
+import { FaLandmark, FaPhone } from 'react-icons/fa';
 
 const SignUp: React.FC = () => {
   return (
@@ -11,8 +11,8 @@ const SignUp: React.FC = () => {
       {/* <Breadcrumb pageName="Sign Up" /> */}
 
       <div className="rounded-sm border  border-stroke bg-black shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="flex flex-wrap items-center ">
-          {/* <div className="hidden w-full xl:block xl:w-1/2">
+        <div className="flex flex-wrap  ">
+          <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
               <Link className="mb-5.5 inline-block" to="/">
                 <img className="hidden dark:block" src={Logo} alt="Logo" />
@@ -146,16 +146,16 @@ const SignUp: React.FC = () => {
                 </svg>
               </span>
             </div>
-          </div> */}
+          </div>
 
-          <div className="w-full  h-full border-stroke dark:border-strokedark  xl:border-l-2">
+          <div className="w-full  border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full  p-4 sm:p-12.5 xl:p-17.5">
               <span className="mb-1.5 block font-medium">Start for free</span>
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Sign Up to TailAdmin
               </h2>
 
-              <form className='  grid grid-cols-1 ms:grid-cols-2 gap-4 '>
+              <form className='   '>
                 <div className="mb-4 ">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Owner  Name
@@ -288,8 +288,24 @@ const SignUp: React.FC = () => {
                       className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
                     />
                   </div>
+                </div>
 
 
+                <div className="mb-4">
+                  <label className="mb-2.5 block font-medium text-black dark:text-white">
+                    City
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Enter your email"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+
+                    <span className="absolute right-4 top-4">
+                      <FaLandmark className="text-gray-500" size={22} />
+                    </span>
+                  </div>
                 </div>
 
 

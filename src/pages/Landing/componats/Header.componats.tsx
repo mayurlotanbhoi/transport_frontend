@@ -26,7 +26,7 @@ export const Header = () => {
                 <div className="flex lg:flex-1">
                     <a href="#" className="-m-1.5 p-1.5">
                         <span className="sr-only">Your Company</span>
-                        <img alt="" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" className="h-8 w-auto" />
+                        <img alt="" src="https://tempfile.aiquickdraw.com/i/in2WG2bQRjKwlyTpzzMJdg.jpg" className="h-8 w-auto" />
                     </a>
                 </div>
                 <div className="flex lg:hidden">
@@ -42,7 +42,9 @@ export const Header = () => {
                         </svg>
                     </button>
                 </div>
-                <PopoverGroup className="hidden lg:flex lg:gap-x-12">
+
+
+                <PopoverGroup onClick={() => setMobileMenuOpen(pre => false)} className="hidden lg:flex lg:gap-x-12">
                     <Popover className="relative">
                         <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
                             Product
@@ -87,6 +89,10 @@ export const Header = () => {
                         </PopoverPanel>
                     </Popover>
 
+                    <Link to="/dashboard" className="text-sm font-semibold leading-6 text-gray-900">
+                        dashboard
+                    </Link>
+
                     <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
                         Features
                     </a>
@@ -97,10 +103,17 @@ export const Header = () => {
                         Company
                     </a>
                 </PopoverGroup>
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                <div onClick={() => setMobileMenuOpen(pre => false)} className="hidden lg:flex lg:flex-1 lg:justify-end">
                     <Link to="/auth/signin" className="text-sm font-semibold leading-6 text-gray-900">
                         Log in <span aria-hidden="true">&rarr;</span>
                     </Link>
+                    {/* <Link
+                        to="/auth/signup"
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                        signup<span aria-hidden="true">&rarr;</span>
+                    </Link> */}
+
                 </div>
             </nav>
             <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -111,7 +124,7 @@ export const Header = () => {
                             <span className="sr-only">Your Company</span>
                             <img
                                 alt=""
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                src="https://tempfile.aiquickdraw.com/i/in2WG2bQRjKwlyTpzzMJdg.jpg"
                                 className="h-8 w-auto"
                             />
                         </a>
@@ -128,7 +141,7 @@ export const Header = () => {
 
                         </button>
                     </div>
-                    <div className="mt-6 flow-root">
+                    <div onClick={() => setMobileMenuOpen(pre => false)} className="mt-6 flow-root">
                         <div className="-my-6 divide-y divide-gray-500/10">
                             <div className="space-y-2 py-6">
                                 <Disclosure as="div" className="-mx-3">
@@ -150,6 +163,9 @@ export const Header = () => {
                                         ))}
                                     </DisclosurePanel>
                                 </Disclosure>
+                                <Link to="/dashboard" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                    dashboard
+                                </Link>
                                 <a
                                     href="#"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
@@ -170,12 +186,18 @@ export const Header = () => {
                                 </a>
                             </div>
                             <div className="py-6">
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/auth/signin"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Log in
-                                </a>
+                                </Link>
+                                <Link
+                                    to="/auth/signup"
+                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                >
+                                    signup
+                                </Link>
                             </div>
                         </div>
                     </div>

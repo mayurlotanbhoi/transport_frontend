@@ -15,7 +15,7 @@ import Settings from './pages/Settings';
 import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
-import { LandingPage } from './pages/Landing/LandingPage';
+import LandingPage from './pages/Landing/LandingPage';
 import UserRout from './Routes/user.rout';
 import PublicRout from './Routes/public.rout';
 
@@ -38,7 +38,7 @@ function App() {
   return (
     <Routes>
       {/* Define routes under /user here if needed */}
-      <Route path="/user/*" element={<UserRout />}>
+      <Route path="/*" element={<UserRout />}>
         <Route
           path="dashboard"
           element={
@@ -165,9 +165,6 @@ function App() {
           )}
         />
       </Route>
-
-
-
 
     </Routes>
   );
