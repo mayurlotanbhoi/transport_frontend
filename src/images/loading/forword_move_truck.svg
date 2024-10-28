@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="200" height="100">
+    <!-- Truck body -->
+    <rect x="20" y="30" width="80" height="40" fill="#4B8B3B" />
+    <rect x="100" y="50" width="60" height="20" fill="#4B8B3B" />
+    <rect x="120" y="40" width="40" height="30" fill="#B2B2B2" />
+    <rect x="30" y="50" width="60" height="20" fill="#2C5F2D" />
+
+    <!-- Truck windows -->
+    <rect x="125" y="45" width="15" height="15" fill="#FFFFFF" />
+    
+    <!-- Wheels -->
+    <circle cx="40" cy="75" r="10" fill="#333" />
+    <circle cx="40" cy="75" r="8" fill="#666" />
+    <circle cx="40" cy="75" r="4" fill="#333" />
+    <circle cx="100" cy="75" r="10" fill="#333" />
+    <circle cx="100" cy="75" r="8" fill="#666" />
+    <circle cx="100" cy="75" r="4" fill="#333" />
+
+    <!-- Animation for wheels -->
+    <animateTransform attributeName="transform" attributeType="XML" type="rotate"
+        from="0 40 75" to="360 40 75" dur="1s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" attributeType="XML" type="rotate"
+        from="0 100 75" to="360 100 75" dur="1s" repeatCount="indefinite"/>
+
+    <!-- Smoke -->
+    <circle cx="150" cy="30" r="5" fill="#BBB" opacity="0.5">
+        <animate attributeName="cx" values="150; 170; 190" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="30; 20; 10" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5; 0; 0" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="160" cy="35" r="3" fill="#BBB" opacity="0.5">
+        <animate attributeName="cx" values="160; 180; 200" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="35; 25; 15" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5; 0; 0" dur="2s" repeatCount="indefinite"/>
+    </circle>
+</svg>

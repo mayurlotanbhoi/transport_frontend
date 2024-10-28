@@ -1,22 +1,111 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import LogoDark from '../../images/logo/logo-dark.svg';
-import Logo from '../../images/logo/logo.svg';
-import { FaLandmark, FaPhone } from 'react-icons/fa';
+// import Logo from '../../images/logo/logo.svg';
+import { FaLandmark, } from 'react-icons/fa';
+import InputField from '../../components/Forms/formsInputs/InputField';
+import { ApiSearchDropDown } from '../../components/Forms/formsInputs';
+import { useForm } from 'react-hook-form';
+import { FaRegUser, FaRoadCircleCheck, } from "react-icons/fa6";
+import { IoSearchSharp } from "react-icons/io5";
+import { MdImageSearch, MdOutlineMobileScreenShare, MdOutlineHomeWork, MdLockOutline, MdOutlineMailOutline, MdOutlineDescription } from "react-icons/md";
+import InputTextarea from '../../components/Forms/formsInputs/InputTextarea';
+import { showSuccessAlert } from '../../components/Aleart/Sweeralert';
+import { appInfo } from '../../common/appInfo/app.info';
+import { useRegisterMutation } from '../../services/auth-service';
+import { Field } from '@headlessui/react';
+import { TrukErrorDialog, TrukLoaderMoveForword, TrukProcessDialog } from '../../components/loaders/truck_move_forword';
+import { handleRequest } from '../../util/handleRequest';
 
-const SignUp: React.FC = () => {
+const { Logo, appName } = appInfo
+const SignUp = () => {
+  const [loading, setLoading] = useState(false);
+
+
+  const [registation, { data, isLoading, isError, isSuccess }] = useRegisterMutation()
+  const { register, setValue, setError, getValues, clearErrors, handleSubmit, formState: { errors } } = useForm();
+
+
+  const handleSelect = (setKey, option) => {
+    console.log(setKey, option);
+    setValue(setKey, option, { shouldValidate: true });
+  };
+
+  const handleChange = (fieldName, e) => {
+    let value = e.target.value
+    setValue(fieldName, value, { shouldValidate: true });
+  };
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+
+    for (const key in data) {
+      if (key === 'logo') {
+        formData.append(key, data[key][0]); // Assuming `data[key]` is a FileList
+      }
+      if (key === 'avatar') {
+        formData.append(key, data[key][0]); // Assuming `data[key]` is a FileList
+      } else if (key === 'city') {
+        formData.append(key, JSON.stringify(data[key])); // Convert city object to JSON
+      } else {
+        formData.append(key, data[key]);
+      }
+    }
+
+    const handleFormSubmission = async () => {
+      await handleRequest(
+        () => registation(formData),  // The API call function
+        {
+          loadingMessage: "Submitting your registration...",
+          successMessage: "Your registration has been completed. Your 15Day Free trail started",
+          errorMessage: "There was an issue with your registration. Please try again later."
+        }
+      );
+    };
+
+    handleFormSubmission()
+
+
+
+
+    // showSuccessAlert();
+
+    // try {
+    //   setLoading(true);
+    //   TrukLoaderMoveForword("Loading your data...");
+    //   const response = await registation(formData); // Ensure `registation` handles FormData correctly
+    //   console.log("response", response);
+    //   // Simulate a successful process
+    //   TrukProcessDialog("Process Complete", "Your data has been loaded successfully.");
+    // } catch (error) {
+    //   console.log('error', error)
+    //   TrukErrorDialog("Failed to load data", "<p>There was an issue with the server. Please try again later.</p>");
+    // } finally {
+    //   setLoading(false);
+    // }
+
+
+
+
+  };
+
+
+
+
   return (
     <>
       {/* <Breadcrumb pageName="Sign Up" /> */}
+      {isLoading && <TrukLoaderMoveForword />}
 
-      <div className="rounded-sm border  border-stroke bg-black shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="rounded-sm border   border-stroke bg-white text-black  shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap  ">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
               <Link className="mb-5.5 inline-block" to="/">
-                <img className="hidden dark:block" src={Logo} alt="Logo" />
-                <img className="dark:hidden" src={LogoDark} alt="Logo" />
+                {/* <img className="hidden dark:block" src={Logo} alt="Logo" /> */}
+                {/* <img className="dark:hidden" src={LogoDark} alt="Logo" /> */}
+                <h1 className=' text-black font-extralight text-3xl' >TransPort</h1>
               </Link>
               <p className="2xl:px-20">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit
@@ -148,23 +237,23 @@ const SignUp: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full  border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
+          <div className="w-full  border-stroke  dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full  p-4 sm:p-12.5 xl:p-17.5">
               <span className="mb-1.5 block font-medium">Start for free</span>
-              <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign Up to TailAdmin
+              <h2 className="mb-9 text-2xl font-bold  dark:text-white sm:text-title-xl2">
+                Sign Up to {appName}
               </h2>
 
-              <form className='   '>
-                <div className="mb-4 ">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
+              <form className=' text-black' onSubmit={handleSubmit(onSubmit)}>
+                {/* <div className="mb-4 ">
+                  <label className="mb-2.5 block font-medium  dark:text-white">
                     Owner  Name
                   </label>
                   <div className="relative">
                     <input
                       type="text"
                       placeholder="Enter your full name"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -189,18 +278,65 @@ const SignUp: React.FC = () => {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </div> */}
 
 
-                <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
+                <InputField
+                  type="text"
+                  placeholder="Enter Owner  Name..."
+                  label="Owner Name"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                        ${errors.owner_name ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+                       dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                  {...register("owner_name", {
+                    required: "Please Enter Owner Name",
+                    minLength: {
+                      value: 3,
+                      message: "Name should be greater than 3 letter"
+                    },
+                    maxLength: {
+                      value: 40,
+                      message: "Name should be less than 40 letter"
+                    }
+                  })}
+                  onChange={(e) => handleChange("owner_name", e)}
+                  icon={<FaRegUser className=" " size={25} />}
+                />
+                {errors.owner_name && <p id="username-error" className="text-red-500 text-xs mt-1 ">{errors.owner_name.message}</p>}
+
+                <InputField
+                  type="text"
+                  placeholder="Enter Company Name..."
+                  label="Company Name"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                        ${errors.company_name ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+                       dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                  {...register("company_name", {
+                    required: "Please Enter Owner Name",
+                    minLength: {
+                      value: 3,
+                      message: "Name should be greater than 3 letter"
+                    },
+                    maxLength: {
+                      value: 40,
+                      message: "Name should be less than 40 letter"
+                    }
+                  })}
+                  onChange={(e) => handleChange("company_name", e)}
+                  icon={<MdOutlineHomeWork className=" " size={25} />}
+                />
+                {errors.company_name && <p id="username-error" className="text-red-500 text-xs mt-1 ">{errors.company_name.message}</p>}
+
+
+                {/* <div className="mb-4">
+                  <label className="mb-2.5 block font-medium  dark:text-white">
                     Company Name
                   </label>
                   <div className="relative">
                     <input
                       type="text"
                       placeholder="Enter your full name"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -225,122 +361,202 @@ const SignUp: React.FC = () => {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </div> */}
 
 
-                <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Mobile Number
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
+                <InputField
+                  type="number"
+                  placeholder="Mobile number..."
+                  label="Mobile number"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                        ${errors.mobile_number ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500  "} 
+                       dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                  {...register("mobile_number", {
+                    required: "Please Enter Mobile number",
+                    minLength: {
+                      value: 10,
+                      message: "Mobile number should be equal 10 letter"
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: "Mobile number should be equal 10 letter"
+                    },
 
-                    <span className="absolute right-4 top-4">
-                      <FaPhone className="text-gray-500" size={22} />
-                    </span>
-                  </div>
-                </div>
+                    pattern: {
+                      value: /^[6-9]\d{9}$/, // Regular expression to match Indian mobile numbers
+                      message: "Please enter valid mobile number"
+                    }
+                  })}
+                  onChange={(e) => handleChange("mobile_number", e)}
+                  icon={<MdOutlineMobileScreenShare className="text-gray-500" size={22} />
+                  }
+                  errorSms={errors.mobile_number && <p id="username-error" className="text-red-500 text-xs mt-1 ">{errors.mobile_number.message}</p>}
 
-                <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
-
-                    <span className="absolute right-4 top-4">
-                      <svg
-                        className="fill-current"
-                        width="22"
-                        height="22"
-                        viewBox="0 0 22 22"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g opacity="0.5">
-                          <path
-                            d="M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z"
-                            fill=""
-                          />
-                        </g>
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-
-                {/* <!-- File upload --> */}
-
-                <div className="mb-4">
-                  <div>
-                    <label className="mb-2.5 block font-medium text-black dark:text-white">
-                      Attach file
-                    </label>
-                    <input
-                      type="file"
-                      className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
-                    />
-                  </div>
-                </div>
+                />
 
 
-                <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    City
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Enter your email"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
-
-                    <span className="absolute right-4 top-4">
-                      <FaLandmark className="text-gray-500" size={22} />
-                    </span>
-                  </div>
-                </div>
 
 
-                <div className="mb-4 ">
-                  <label className="mb-3 block text-black dark:text-white">
-                    Address
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder="Default textarea"
-                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  ></textarea>
-                </div>
 
-                <div className="mb-4  row-span-4">
-                  <label className="mb-3 block text-black dark:text-white">
+                <InputField
+                  type="email"
+                  placeholder="Enter Email..."
+                  label="Email"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                       ${errors.email ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+                     dark:border-form-strokedark dark:bg-form-input dark:text-white`}
+
+                  {...register("email", {
+                    required: "Please Enter Email id",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Regular expression for email validation
+                      message: "Please Enter valid Email id"
+                    }
+                  })}
+                  onChange={(e) => handleChange("email", e)}
+                  icon={<MdOutlineMailOutline className="text-gray-500" size={22} />
+                  }
+                  errorSms={errors.email && <p id="username-error" className="text-red-500 text-xs mt-1 ">{errors.email.message}</p>}
+
+                />
+                <InputField
+                  type="file"
+                  placeholder="upload logo,Banner, visiting Card..."
+                  label="Attach Logo ,Banner, visiting Card "
+                  accept="image/png, image/jpeg, image/jpg"
+                  className={`w-full cursor-pointer rounded-lg border bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-white file:py-3 file:px-5 file:hover:bg-primary file:hover:text-white file:hover:bg-opacity-10
+                  ${errors.logo ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+                  disabled:cursor-default disabled:bg-white dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white`}
+                  {...register('logo', { required: "Please Upload Logo" })}
+                  icon={<MdImageSearch className="text-gray-500" size={22} />}
+                  errorSms={errors.logo && <p id="logo-error" className="text-red-500 text-xs mt-1">{errors.logo.message}</p>}
+
+                />
+                {/* {errors.logo && <p id="logo-error" className="text-red-500 text-xs mt-1">{errors.logo.message}</p>} */}
+
+
+                <InputField
+                  type="file"
+                  placeholder="upload Profile..."
+                  label="Attach Profile"
+                  accept="image/png, image/jpeg, image/jpg"
+                  className={`w-full cursor-pointer rounded-lg border bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-white file:py-3 file:px-5 file:hover:bg-primary file:hover:text-white file:hover:bg-opacity-10
+                  ${errors.avatar ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+                  disabled:cursor-default disabled:bg-white dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white`}
+                  {...register('avatar', { required: "Please Upload avatar" })}
+                  icon={<MdImageSearch className="text-gray-500" size={22} />}
+                  errorSms={errors.avatar && <p id="avatar-error" className="text-red-500 text-xs mt-1">{errors.avatar.message}</p>}
+
+
+                />
+
+                <ApiSearchDropDown
+                  apiUrl="http://localhost:8000/api/v1/cities/search"
+                  onSelect={handleSelect}
+                  searchingKey="cityName"
+                  setKey='city'
+                  label="City"
+                  className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-green-500 focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-green-500"
+                  icon={<IoSearchSharp className="text-gray-500 mt-3" size={22} />}
+                />
+
+                <InputTextarea
+                  type="text"
+                  placeholder="Enter address..."
+                  rows={2}
+                  label="Address"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                        ${errors.address ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+                       dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                  {...register("address", {
+                    required: "Please Enter Address",
+                    minLength: {
+                      value: 10,
+                      message: "Address be greater than 10 letter"
+                    },
+                    maxLength: {
+                      value: 200,
+                      message: "Address should be less than 200 letter"
+                    }
+                  })}
+                  onChange={(e) => handleChange("address", e)}
+                  icon={<MdOutlineHomeWork className=" " size={25} />}
+                />
+                {errors.address && <p id="username-error" className="text-red-500 text-xs mt-1 ">{errors.address.message}</p>}
+
+
+                <InputTextarea
+                  type="text"
+                  placeholder="Enter Description About Your Company..."
+                  rows={6}
+                  label="Description About Your Company"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                        ${errors.description ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500  "} 
+                       dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                  {...register("description", {
+                    required: "Please Enter Address",
+                    minLength: {
+                      value: 10,
+                      message: "Address be greater than 10 letter"
+                    },
+                    maxLength: {
+                      value: 200,
+                      message: "Address should be less than 200 letter"
+                    }
+                  })}
+                  onChange={(e) => handleChange("description", e)}
+                  icon={<MdOutlineDescription className=" " size={25} />}
+                  errorSms={errors.description && <p id="username-error" className="text-red-500 text-xs mt-1 ">{errors.description.message}</p>}
+
+                />
+
+
+                <InputTextarea
+                  type="text"
+                  placeholder="Ex: Pune indore surat all India..."
+                  rows={6}
+                  label="Enter Your Transport Route"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                        ${errors.route ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500  "} 
+                       dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                  {...register("route", {
+                    required: "Please Enter Address",
+                    minLength: {
+                      value: 8,
+                      message: "Route be greater than 8 letter"
+                    },
+                    maxLength: {
+                      value: 2000,
+                      message: "Route should be less than 2000 letter"
+                    }
+                  })}
+                  onChange={(e) => handleChange("route", e)}
+                  icon={<FaRoadCircleCheck className=" " size={25} />}
+                  errorSms={errors.route && <p id="route-error" className="text-red-500 text-xs mt-1 ">{errors.route.message}</p>}
+
+                />
+
+                {/* <div className="mb-4  row-span-4">
+                  <label className="mb-3 block  dark:text-white">
                     Description About Your Company
                   </label>
                   <textarea
                     rows={6}
                     placeholder="Description About Your Company"
-                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5  outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   ></textarea>
-                </div>
+                </div> */}
 
 
-                <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
+                {/* <div className="mb-4">
+                  <label className="mb-2.5 block font-medium  dark:text-white">
                     Password
                   </label>
                   <div className="relative">
                     <input
                       type="password"
                       placeholder="Enter your password"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -368,14 +584,14 @@ const SignUp: React.FC = () => {
                 </div>
 
                 <div className="mb-6">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
+                  <label className="mb-2.5 block font-medium  dark:text-white">
                     Re-type Password
                   </label>
                   <div className="relative">
                     <input
                       type="password"
                       placeholder="Re-enter your password"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -400,9 +616,48 @@ const SignUp: React.FC = () => {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="mb-5">
+                <InputField
+                  type="password"
+                  placeholder="Enter your password..."
+                  label="Password"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+    ${errors.password ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+    dark:border-form-strokedark dark:bg-form-input dark:text-white`}
+                  {...register("password", {
+                    required: "Please enter a password",
+                    minLength: {
+                      value: 4,
+                      message: "Password must be at least 4 characters",
+                    },
+                  })}
+                  onChange={(e) => handleChange("password", e)}
+                  icon={<MdLockOutline className="text-gray-500" size={22} />}
+                  errorSms={errors.password && <p id="password-error" className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+
+                />
+
+                <InputField
+                  type="password"
+                  placeholder="Re-type your password..."
+                  label="Re-type Password"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+    ${errors.retype_password ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+    dark:border-form-strokedark dark:bg-form-input dark:text-white`}
+                  {...register("retype_password", {
+                    required: "Please re-type your password",
+                    validate: value =>
+                      value === getValues("password") || "Passwords do not match",
+                  })}
+                  onChange={(e) => handleChange("retype_password", e)}
+                  icon={<MdLockOutline className="text-gray-500" size={22} />}
+                  errorSms={errors.retype_password && <p id="retype-password-error" className="text-red-500 text-xs mt-1">{errors.retype_password.message}</p>}
+
+                />
+
+
+                <div className="my-5">
                   <input
                     type="submit"
                     value="Create account"

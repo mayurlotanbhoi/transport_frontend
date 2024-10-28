@@ -1,10 +1,49 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
 import UserOne from '../../images/user/user-01.png';
+import { useLogoutMutation } from '../../services/auth-service';
+import { handleRequest } from '../../util/handleRequest';
+import { logOut } from '../../redux/auth/authSlice';
+import { useDispatch } from 'react-redux';
 
-const DropdownUser = () => {
+const DropdownUser = ({ logo, owner_name, company_name }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [logOutUser, { data, isLoading, isError, error }] = useLogoutMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
+  const handleLogOut = async () => {
+    const response = await handleRequest(
+      () => logOutUser(),  // The API call function
+      {
+        loadingMessage: "Logging out......",
+        successMessage: "Logging out successfull",
+        errorMessage: "There was an issue with your Logging out. Please try again later."
+      }
+    );
+
+    console.log("responce?.data", response)
+
+    if (response?.data?.statusCode === 204) navigate('/login');
+    // console.log("responce", responce)
+  };
+
+  // const handleLogOut = async () => {
+  //   try {
+  //     const response = await logOutUser().unwrap();
+  //     console.log("response?.data", response);
+
+  //     if (response?.data?.statusCode === 204 && response?.data?.success === true) {
+  //       // dispatch(logOut());
+  //       navigate('/login');
+  //     }
+  //   } catch (err) {
+  //     console.error('Logout failed:', err);
+  //     // Optionally, handle error messages here
+  //   }
+  // };
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -15,13 +54,13 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {company_name}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{owner_name}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img src={UserOne} alt="User" />
+          <img className="h-12 w-12 rounded-full" src={logo} alt="User" />
         </span>
 
         <svg
@@ -119,7 +158,7 @@ const DropdownUser = () => {
               </Link>
             </li>
           </ul>
-          <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+          <button onClick={handleLogOut} className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
             <svg
               className="fill-current"
               width="22"

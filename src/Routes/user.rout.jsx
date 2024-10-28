@@ -2,10 +2,13 @@ import React, { useState, ReactNode } from 'react';
 import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
 import { Navigate, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function UserRout() {
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [isAuthenticated, SetIsAuthenticate] = useState<boolean>(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // const [isAuthenticated, SetIsAuthenticate] = useState<boolean>(true);
+  const isAuthenticated = useSelector((state) => state.auth.isLogin)
+
 
 
   if (!isAuthenticated) {

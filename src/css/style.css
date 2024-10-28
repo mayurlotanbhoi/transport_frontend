@@ -9,7 +9,9 @@
 }
 
 @layer components {
+  
 }
+
 
 @layer utilities {
   /* Chrome, Safari and Opera */
@@ -29,6 +31,44 @@
     @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
   }
 }
+
+:root {
+  --primary-color: #361869; /* Your primary color */
+  --primary-dark: #6B42B8; /* A darker shade of primary */
+  --primary-light: #B78CFF; /* A lighter shade of primary */
+  --primary-text: #FFFFFF; /* A text color that contrasts with primary */
+  --primary-accent: #E2D7FF; /* A soft accent color matching primary */
+}
+
+/* Example usage */
+.primary-color {
+  background-color: var(--primary-dark);
+  color: var(--primary-text);
+}
+.secondary-color{
+  background-color: var(--primary-color);
+  color: var(--primary-text);
+}
+
+.header {
+  background-color: var(--primary-color);
+}
+
+.button {
+  background-color: var(--primary-dark);
+  color: var(--primary-text);
+}
+
+.button-accent {
+  background-color: var(--primary-accent);
+  color: var(--primary-dark);
+}
+
+
+/* .sinUpform_bg  {
+
+} */
+
 
 /* third-party libraries CSS */
 
@@ -212,4 +252,16 @@ span.flatpickr-weekday,
 
 [x-cloak] {
   display: none !important;
+}
+
+/* Hide the increment and decrement arrows in Chrome, Safari, Edge, and Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide the increment and decrement arrows in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

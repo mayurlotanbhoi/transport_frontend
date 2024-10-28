@@ -1,10 +1,56 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
+import InputField from '../../components/Forms/formsInputs/InputField';
+import { useForm } from 'react-hook-form';
+import { MdLockOutline, MdOutlineMobileScreenShare } from 'react-icons/md';
+import { useLoginMutation } from '../../services/auth-service';
+import { handleRequest } from '../../util/handleRequest';
+import { setCredentials } from '../../redux/auth/authSlice';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../../util/localStorage';
 
-const SignIn: React.FC = () => {
+const SignIn = () => {
+  const [login, { data, isLoading, isError, error }] = useLoginMutation();
+  const { register, setValue, setError, getValues, clearErrors, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
+
+
+  const handleChange = (fieldName, e) => {
+    let value = e.target.value
+    setValue(fieldName, value, { shouldValidate: true });
+  };
+
+  const onSubmit = async (formData) => {
+
+
+    const handleFormSubmission = async (formData) => {
+      const responce = await handleRequest(
+        () => login(formData),  // The API call function
+        {
+          loadingMessage: "Logging in......",
+          successMessage: "login successfull",
+          errorMessage: "There was an issue with your Logging. Please try again later."
+        }
+      );
+
+      console.log("responce?.data", responce?.data?.data)
+
+      if (responce?.data?.statusCode === 200 && responce?.data?.success === true)
+        // accessToken
+        setToken(responce?.data?.data?.accessToken)
+      // console.log("accessToken", responce?.data?.data?.accessToken)
+      dispatch(setCredentials(responce?.data?.data));
+      navigate('/dashboard')
+      // console.log("responce", responce)
+    };
+
+    handleFormSubmission(formData)
+
+  };
+
   return (
     <>
       {/* <Breadcrumb pageName="Sign In" /> */}
@@ -154,8 +200,9 @@ const SignIn: React.FC = () => {
                 Sign In to TailAdmin
               </h2>
 
-              <form>
-                <div className="mb-4">
+              <form className='text-white' onSubmit={handleSubmit(onSubmit)}
+              >
+                {/* <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
                   </label>
@@ -184,9 +231,57 @@ const SignIn: React.FC = () => {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="mb-6">
+                <InputField
+                  type="number"
+                  placeholder="Mobile number..."
+                  label="Mobile number"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                        ${errors.mobile_number ? "border-red-500 focus:border-red-500 " : " border-white  focus:border-primary "} 
+                       dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                  {...register("mobile_number", {
+                    required: "Please Enter Mobile number",
+                    minLength: {
+                      value: 10,
+                      message: "Mobile number should be equal 10 letter"
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: "Mobile number should be equal 10 letter"
+                    },
+
+                    pattern: {
+                      value: /^[6-9]\d{9}$/, // Regular expression to match Indian mobile numbers
+                      message: "Please enter valid mobile number"
+                    }
+                  })}
+                  onChange={(e) => handleChange("mobile_number", e)}
+                  icon={<MdOutlineMobileScreenShare className="text-gray-500" />
+                  }
+                />
+                {errors.mobile_number && <p id="username-error" className="text-red-500 text-xs mt-1 ">{errors.mobile_number.message}</p>}
+
+                <InputField
+                  type="password"
+                  placeholder="Enter your password..."
+                  label="Password"
+                  className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                       ${errors.password ? "border-red-500 focus:border-red-500" : "border-white focus:border-primary"} 
+                             dark:border-form-strokedark dark:bg-form-input dark:text-white`}
+                  {...register("password", {
+                    required: "Please enter a password",
+                    minLength: {
+                      value: 4,
+                      message: "Password must be at least 4 characters",
+                    },
+                  })}
+                  onChange={(e) => handleChange("password", e)}
+                  icon={<MdLockOutline className="text-gray-500" size={22} />}
+                />
+                {errors.password && <p id="password-error" className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+
+                {/* <div className="mb-6">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Re-type Password
                   </label>
@@ -219,9 +314,9 @@ const SignIn: React.FC = () => {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="mb-5">
+                <div className="mb-5 mt-5">
                   <input
                     type="submit"
                     value="Sign In"

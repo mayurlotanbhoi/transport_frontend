@@ -18,7 +18,7 @@ const callsToAction = [
     { name: 'Contact sales', href: '#', },
 ]
 
-export const Header = () => {
+export const PublicHeader = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     return (
         <header className=" bg-white">
