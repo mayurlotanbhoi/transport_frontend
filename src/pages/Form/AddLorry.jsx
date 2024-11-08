@@ -25,6 +25,7 @@ import { GiCartwheel, GiCarWheel, GiModernCity, GiWeight } from 'react-icons/gi'
 import SearchDropdown from '../../components/Forms/formsInputs/SearchDropdown';
 import { vehicleCapacities, vehicleLength, vehicleTypes } from '../../common/static/static';
 import { useRegisterVehicleMutation } from '../../services/vehicle.services';
+import { CITY_API } from '../../util/config';
 const { Logo, appName } = appInfo
 export default function AddLorry() {
   // const [registation, { data, isLoading, isError, isSuccess }] = useRegisterMutation()
@@ -37,7 +38,6 @@ export default function AddLorry() {
   };
 
   const handleChange = (fieldName, e) => {
-
     console.log("fieldName, e", fieldName, e)
     let value = e.target.value
     setValue(fieldName, value, { shouldValidate: true });
@@ -47,7 +47,6 @@ export default function AddLorry() {
     // Assuming the DatePicker provides the `date` directly
     setValue(fieldName, date, { shouldValidate: true });
   };
-
 
   const onSubmit = async (data) => {
     // const formData = new FormData();
@@ -80,9 +79,6 @@ export default function AddLorry() {
     handleFormSubmission()
 
   };
-
-
-
   // const handleRegister = (vehicleData) => {
   //   registerVehicle(vehicleData)
   //     .then((response) => {
@@ -140,7 +136,6 @@ export default function AddLorry() {
                   }}
                   icon={<FaAsterisk size={22} />}
                   errorSms={errors.lorry_number && <p className="text-red-500 text-xs mt-1 ">{errors.lorry_number.message}</p>}
-
                 />
 
 
@@ -203,13 +198,11 @@ export default function AddLorry() {
                   onChange={(e) => handleChange("owner_addres", e)}
                   icon={<FaAddressCard size={22} />}
                   errorSms={errors.owner_addres && <p className="text-red-500 text-xs mt-1 ">{errors.owner_addres.message}</p>}
-
                 />
 
                 {/* Owner City */}
-
                 <ApiSearchDropDown
-                  apiUrl="http://localhost:8000/api/v1/cities/search"
+                  apiUrl={CITY_API}
                   onSelect={handleSelect}
                   searchingKey="cityName"
                   setKey='owner_city'
@@ -220,7 +213,7 @@ export default function AddLorry() {
 
                 />
                 {/* <ApiSearchDropDown
-                  apiUrl="http://localhost:8000/api/v1/cities/search"
+                  apiUrl={CITY_API}
                   onSelect={handleSelect}
                   searchingKey="cityName"
                   setKey='owner_city'
@@ -231,7 +224,7 @@ export default function AddLorry() {
                 /> */}
 
                 <SelectInput
-                  // apiUrl="http://localhost:8000/api/v1/cities/search"
+                  // apiUrl={CITY_API}
                   onSelect={handleSelect}
                   searchingKey="vehicale_type"
                   setKey='vehicale_type'
@@ -244,7 +237,7 @@ export default function AddLorry() {
 
 
                 <SelectInput
-                  // apiUrl="http://localhost:8000/api/v1/cities/search"
+                  // apiUrl={CITY_API}
                   onSelect={handleSelect}
                   searchingKey="length"
                   setKey='vehicale_length'
@@ -256,7 +249,7 @@ export default function AddLorry() {
                 />
 
                 <SelectInput
-                  // apiUrl="http://localhost:8000/api/v1/cities/search"
+                  // apiUrl={CITY_API}
                   onSelect={handleSelect}
                   searchingKey="vehicale_capacity"
                   setKey='vehicale_capacity'

@@ -17,6 +17,7 @@ import { useRegisterMutation } from '../../services/auth-service';
 import { Field } from '@headlessui/react';
 import { TrukErrorDialog, TrukLoaderMoveForword, TrukProcessDialog } from '../../components/loaders/truck_move_forword';
 import { handleRequest } from '../../util/handleRequest';
+import { CITY_API } from '../../util/config';
 
 const { Logo, appName } = appInfo
 const SignUp = () => {
@@ -451,7 +452,7 @@ const SignUp = () => {
                 />
 
                 <ApiSearchDropDown
-                  apiUrl="http://localhost:8000/api/v1/cities/search"
+                  apiUrl={CITY_API}
                   onSelect={handleSelect}
                   searchingKey="cityName"
                   setKey='city'

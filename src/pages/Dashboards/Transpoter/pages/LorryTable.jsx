@@ -8,6 +8,10 @@ import { useState } from "react";
 import Swal from 'sweetalert2';
 import html2canvas from 'html2canvas';
 import withReactContent from 'sweetalert2-react-content';
+import { FaTruck } from "react-icons/fa";
+// import TruckMoveForwordIcon from "../../images/loading/forword_move_truck.gif";
+import TruckMoveForwordIcon from "../../../../images/loading/forword_move_truck.svg"
+import { calculateProgress } from "./TripHistory";
 
 const MySwal = withReactContent(Swal);
 
@@ -45,17 +49,17 @@ const LorryTable = () => {
     console.log("vehicles", vehicles)
 
     return (
-        <div className=" w-full rounded-sm border border-stroke bg-white px-2 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-            <div className=" flex justify-between items-center">
+        <div className=" w-full rounded-sm border border-stroke   pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+            <div className=" flex justify-between items-center px-2">
                 <h2 className=" font-bold mb-2 text-black dark:text-white xl:pl-11">Your Lorry's</h2>
                 {/* <Link className=" bg-primary btn" to={'add-lorry'}></Link> */}
                 <Link to={'/dashboard/add-lorry'} type="button" class="text-white flex items-center bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                     <IoMdAdd size={22} />  Add Lorry</Link>
             </div>
-            <div className=" w-full  flex flex-wrap justify-around ">
+            <div className=" w-full  flex flex-wrap justify-between   ">
                 {!(error && loading) && vehicles.map((vehicle, index) => {
                     return (
-                        <div className=" w-full sm:min-w-[300px]  " key={index}>
+                        <div className=" w-full md:w-80    " key={index}>
                             <VehicleDetails vehicle={vehicle} />
                         </div>
                     )
@@ -184,28 +188,59 @@ const LorryTable = () => {
 };
 
 export default LorryTable;
-
-
 // import React, { useState } from 'react';
 
 const VehicleDetails = ({ vehicle }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [running, setrunning] = useState(false);
     const [truckDetails, setTruckDetails] = useState({ city: '', routes: '' });
     const toggleExpand = () => setIsExpanded(!isExpanded);
+    const { logo, company_name, owner_name: transport, city: transpoterCity, mobile_number } = useSelector((state) => state.auth.user)
+    running
 
+    // console.log("city", city)
+    const {
+        aadharcard_number, createdAt, fitness_expire_date, insurance_expire_date,
+        insurance_photo, lorry_id, lorry_number, owner_addres, owner_city,
+        owner_mobile_number, owner_name, owner_pancard_number, owner_photo,
+        permit_expire_date, permit_photo, updatedAt, user_id, vehicale_capacity,
+        vehicale_length, vehicale_type, trip_start_date, speed_per_hr, distance_km
+    } = vehicle;
 
     // Function to show the input popup
     const showInputPopup = async () => {
         const { value: formValues } = await MySwal.fire({
             title: '<h2 class="text-blue-500">Enter Truck Details</h2>',
             html: `
-        <input id="swal-input1" class="swal2-input" placeholder="Available truck in city">
-        <input id="swal-input2" class="swal2-input" placeholder="Routes covered (e.g., City A to City B)">
+                        <div class="m-0 p-0 text-start w-full">
+                <label class="m-0 p-0 block text-black dark:text-white">
+                  Available truck in city
+                </label>
+                <input
+                id="swal-input1" 
+                  type="text"
+                  placeholder="Available truck in city"
+                  class="  w-full m-0 p-0swal2-input rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:text-white"
+                />
+              </div>
+              <div class="m-0 p-0 text-start w-full mt-4">
+                <label class="m-0 p-0 block text-black dark:text-white">
+                  Routes covered
+                </label>
+                <input
+                  type="text"
+                  id="swal-input2"
+                  placeholder="Routes covered"
+                  class="w-full m-0 p-0 swal2-input rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:text-white"
+                />
+              </div>
+
+        
       `,
             focusConfirm: false,
             showCancelButton: true,
             confirmButtonText: '<span class="text-white">Submit</span>',
-            cancelButtonText: '<span class="text-gray-600">Cancel</span>',
+            cancelButtonText: '<span class="text-white">Cancel</span>',
             confirmButtonColor: '#34D399', // Tailwind emerald color
             cancelButtonColor: '#F87171',  // Tailwind red color
             preConfirm: () => {
@@ -229,19 +264,55 @@ const VehicleDetails = ({ vehicle }) => {
         }
     };
 
+    // <input id="swal-input1" class="swal2-input w-full" placeholder="Available truck in city">
+    // <input id="swal-input2" class="swal2-input w-full" placeholder="Routes covered (e.g., City A to City B)">
+
     // Function to show details with a share option
     const showDetailsPopup = (city, routes) => {
         MySwal.fire({
-            title: '<h2 className="text-blue-500">Truck Details</h2>',
+            title: '<h2 class="text-blue-500">Truck Details</h2>',
             html: `
-        <div id="shareContent" className="text-left p-4">
-          <p><strong>City:</strong> ${city}</p>
-          <p><strong>Routes:</strong> ${routes}</p>
-        </div>
-      `,
+            <div id="shareContent" style="margin: 0; padding: 0; width: 100vw; max-width: 400px; text-align: start; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                <!-- Profile Section -->
+                <div class="golden-gradian" style="width: 100%; height: 60px;  padding: 8px; display: flex; align-items: center; color: #333;">
+                    <div style="flex: 0 0 10%; display: flex; align-items: center; justify-content: center;">
+                        <img style="width: 30px; height: 30px; max-width: 30px; border-radius: 50%;" src="${logo}" alt="Profile" />
+                    </div>
+                    <div style="margin-left: 12px; flex: 1;">
+                        <h2 style="font-weight: 600; font-size: 1rem;">${transport}</h2>
+                        <p style="font-size: 0.875rem; color: #333; display: flex; align-items: center;">
+                            <svg style="width: 14px; height: 14px; margin-right: 4px; fill: #fff;" viewBox="0 0 24 24">
+                                <path d="M12 2C8.1 2 5 5.1 5 9c0 4.4 4.3 9.6 6.4 11.6c.4.4 1 .4 1.4 0c2.1-2 6.4-7.2 6.4-11.6c0-3.9-3.1-7-7-7zM12 12.5c-1.9 0-3.5-1.6-3.5-3.5S10.1 5.5 12 5.5s3.5 1.6 3.5 3.5S13.9 12.5 12 12.5z"></path>
+                            </svg>
+                            ${transpoterCity?.cityName} ${transpoterCity?.stateShortName}
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Truck Details Section -->
+                <div style="padding: 8px;">
+                    <h3 style="font-size: 0.875rem; color: #333;">Truck Available in <span style="color: #d97706; font-weight: bold;">${city}</span></h3>
+                    <div style="margin-top: 8px;  margin-bottom: 8px; display: flex; align-items: center; background-color: #f1f5f9; padding: 8px; border-radius: 8px;">
+                        <div style="flex: 0 0 15%; display: flex; align-items: center; justify-content: center;">
+                            <img style="width: 100%; height: auto; max-width: 38px; border-radius: 50%;" src="https://cdn-icons-png.flaticon.com/128/713/713311.png" alt="Truck Icon" />
+                        </div>
+                        <div style="margin-left: 8px; flex: 1;">
+                            <h4 style="font-size: 1rem; font-weight: 600; color: #2563eb;">${vehicale_capacity}, ${vehicale_type}</h4>
+                            <p style="font-size: 0.875rem; color: #333;">${vehicale_length}</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.875rem; color: #333; margin-top: 8px;"><strong>Routes:</strong> ${routes}</p>
+                </div>
+    
+                <!-- Contact Section -->
+                <div class="golden-gradian" style="display: flex; align-items: center; justify-content: center; height: 36px; font-size: 0.875rem; color: #333; font-weight: 500;">
+                    &#9743; Contact: ${mobile_number}
+                </div>
+            </div>
+            `,
             showCancelButton: true,
-            confirmButtonText: '<span className="text-white">Share</span>',
-            cancelButtonText: '<span className="text-gray-600">Close</span>',
+            confirmButtonText: '<span style="color: #ffffff;">Share</span>',
+            cancelButtonText: '<span style="color: #4b5563;">Close</span>',
             confirmButtonColor: '#34D399',
             cancelButtonColor: '#F87171',
             preConfirm: () => handleShare(),
@@ -252,7 +323,7 @@ const VehicleDetails = ({ vehicle }) => {
     const handleShare = async () => {
         const shareContent = document.getElementById('shareContent');
 
-        const canvas = await html2canvas(shareContent, { backgroundColor: null });
+        const canvas = await html2canvas(shareContent, { backgroundColor: null, useCORS: true });
 
         canvas.toBlob(async (blob) => {
             const file = new File([blob], 'truck_info.png', { type: 'image/png' });
@@ -282,34 +353,39 @@ const VehicleDetails = ({ vehicle }) => {
         });
     };
 
-    const {
-        aadharcard_number, createdAt, fitness_expire_date, insurance_expire_date,
-        insurance_photo, lorry_id, lorry_number, owner_addres, owner_city,
-        owner_mobile_number, owner_name, owner_pancard_number, owner_photo,
-        permit_expire_date, permit_photo, updatedAt, user_id, vehicale_capacity,
-        vehicale_type
-    } = vehicle;
+    console.log("calculateProgress(trip_start_date)", calculateProgress(trip_start_date, speed_per_hr, distance_km))
 
     return (
-        <div className="w-full md:max-w-md mx-auto bg-white shadow-lg rounded-2xl overflow-hidden  mb-4">
+        <div className="w-full relative md:max-w-md   bg-white  shadow-lg  overflow-hidden  mb-4">
             {/* Header with basic details */}
-            <p className=" w-full text-end mb-[-22.5px] sm:mb-[-22px]   "> <span className=" text-black rounded-bl-2xl px-4 bg-green-300">Nunning</span> </p>
-            <div className="flex items-center p-4 primary-color text-white">
+            {/* trip_start_date(pin):"2024-11-03T03:11:46.872Z"
+speed_per_hr(pin):1
+distance_km(pin):500 */}
+            {/* <span className=" text-black rounded-bl-2xl px-4 bg-green-300">Nunning</span> */}
+            {calculateProgress(trip_start_date, speed_per_hr, distance_km) < 100 && <div className=" absolute top-0  w-full flex justify-end items-center gap-2 p-2 ">
+                <p className=" flex justify-center items-center w-2 h-2 rounded-full bg-green-600">
+                    <p className=" w-2 h-2 rounded-full animate-ping bg-green-400">
 
-                <img src={owner_photo} alt="Owner" className="w-16 h-16 rounded-full mr-4" />
+                    </p>
+                </p>
+                <small className="text-black-2 font-extrabold"> On Trip</small>
+            </div>}
+
+            <div className="flex items-center px-4 py-2 text-black-2  ">
+
+
+                <img src={owner_photo} alt="Owner" className="w-16 h-16 rounded-2xl mr-4" />
                 <div>
-                    <h2 className="text-lg font-bold">{owner_name}</h2>
-                    <p className="text-sm">Vehicle No: {lorry_number}</p>
-                    <p className="text-sm">Type: {vehicale_type}</p>
+                    <h2 className="text-lg font-bold text-black-2 ">{owner_name}</h2>
+                    <p className="text-sm text-purple-700"> {lorry_number}</p>
+                    <p className="text-sm"> {vehicale_type} + {vehicale_length} + {vehicale_capacity}</p>
                 </div>
             </div>
-
-
 
             {/* Expand/Collapse Button */}
             <button
                 onClick={toggleExpand}
-                className="w-full text-center py-2 bg-gray-200 text-gray-700 hover:bg-gray-300"
+                className="w-full text-[12px] text-center  bg-gray-200 text-gray-700 hover:bg-gray-300"
             >
                 {isExpanded ? 'Show Less' : 'Show More'}
             </button>

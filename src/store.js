@@ -10,13 +10,14 @@ import storageSession from 'redux-persist/lib/storage/session'; // Use session s
 import persistStore from 'redux-persist/es/persistStore';
 import { baseApi } from './services/baseApi';
 import { decryptData, encryptData } from './util/encryptData';
+import { partyApi } from './services/party.services';
 
 
 // Define the persistence configuration for auth and vehicle slices
 const authPersistConfig = {
     key: 'auth',
     storage: storageSession,
-    whitelist: ['auth'],
+    // whitelist: ['auth'],
     transforms: [
         {
             // Transform to encrypt the entire state before storing
@@ -30,7 +31,7 @@ const authPersistConfig = {
 const vehiclePersistConfig = {
     key: 'vehicle',
     storage: storageSession,
-    whitelist: ['vehicle'],
+    // whitelist: ['vehicle'],
     transforms: [
         {
             // Transform to encrypt the entire state before storing
@@ -47,6 +48,7 @@ const rootReducer = combineReducers({
     vehicle: persistReducer(vehiclePersistConfig, vehicleSlice), // Persisted vehicle reducer
     [vehicleApi.reducerPath]: vehicleApi.reducer,
     [tripHistoryApi.reducerPath]: tripHistoryApi.reducer,
+    [partyApi.reducerPath]: partyApi.reducer,
     [baseApi.reducerPath]: baseApi.reducer,
 });
 

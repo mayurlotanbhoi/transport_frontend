@@ -4,6 +4,8 @@ import { FaTruckArrowRight, FaUser } from 'react-icons/fa6';
 import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { PiSteeringWheelFill } from "react-icons/pi";
+import { FcCallback } from "react-icons/fc";
+
 
 // const calculateProgress = (status) => {
 //     const now = new Date();
@@ -28,12 +30,12 @@ import { PiSteeringWheelFill } from "react-icons/pi";
 // };
 
 
-const calculateProgress = (status) => {
+export const calculateProgress = (trip_start_date, speed_per_hr, distance_km,) => {
     const now = new Date();
-    const leaveTime = new Date(status.createdAt);
+    const leaveTime = new Date(trip_start_date);
 
     // Calculate the estimated arrival time (eta) based on distance and speed
-    const hours = status.distance_km / status.speed_per_hr;
+    const hours = distance_km / speed_per_hr;
     const eta = new Date(leaveTime.getTime() + hours * 60 * 60 * 1000);
 
     const totalTime = eta - leaveTime; // Total time for the journey in milliseconds
@@ -46,7 +48,7 @@ const calculateProgress = (status) => {
     return Math.min(Math.max(progress, 0), 100);
 };
 
-const calculateEstimatedTime = (status) => {
+export const calculateEstimatedTime = (status) => {
     // Calculate estimated time based on total distance and speed
     const hours = status.distance_km / status.speed_per_hr;
     const wholeHours = Math.floor(hours);
@@ -182,10 +184,12 @@ const TripCard = ({ isExpanded, setExpanded, index, LorryRunningStatus }) => {
         updatedAt,
         user_id,
         vehicale_number,
+        payment_date,
+
     } = LorryRunningStatus;
 
 
-    const progress = calculateProgress(LorryRunningStatus);
+    const progress = calculateProgress(LorryRunningStatus?.createdAt, LorryRunningStatus?.speed_per_hr, LorryRunningStatus?.distance_km,);
     const estimatedTime = calculateEstimatedTime(LorryRunningStatus);
     // const isExpanded = expanded === index; // Track which card is expanded
 
@@ -245,6 +249,49 @@ const TripCard = ({ isExpanded, setExpanded, index, LorryRunningStatus }) => {
 
             {isExpanded && (
                 <>
+
+                    {/* Action Buttons */}
+                    <div className="flex justify-between items-center mt-6">
+                        <button
+                            onClick={() => window.location.href = `tel:${driver_contact}`}
+
+                            className="bg-white border flex items-center gap-2 border-green-600 text-green-600 px-4 py-2 rounded-md">
+                            {/* call Driver btn */}
+                            <FcCallback /> Driver
+                        </button>
+                        <button
+                            onClick={() => window.location.href = `tel:${Party_contact}`}
+
+                            className="bg-white border flex items-center gap-2 border-green-600 text-green-600 px-4 py-2 rounded-md">
+                            {/* call Driver btn */}
+                            <FcCallback /> Party
+                        </button>                    </div>
+
+                    {/* Freight Details */}
+                    <div className="mt-4">
+                        <div className="flex justify-between items-center">
+                            <span className="text-gray-700 font-semibold">Trip Detail</span>
+                            <div className="flex items-center">
+                                <span className="text-gray-700 font-semibold"> {distance_km} km</span>
+                            </div>
+                        </div>
+
+                        {/* Freight Adjustments */}
+                        <div className="mt-2 text-sm">
+                            <div className="flex justify-between text-gray-500">
+                                <span>Speed</span>
+                                <span>{speed_per_hr} H/P</span>
+                            </div>
+                            {payment_date && <div className="flex justify-between mt-2 text-gray-500">
+                                <span>payment_date</span>
+                                <span>{new Date(payment_date)?.toISOString()}</span>
+                            </div>}
+                            <div className="flex justify-between mt-2 text-gray-500">
+                                <span>Trip ID</span>
+                                <span>{trip_id}</span>
+                            </div>
+                        </div>
+                    </div>
                     {/* Action Buttons */}
                     <div className="flex justify-between items-center mt-6">
                         <button className="bg-white border border-green-600 text-green-600 px-4 py-2 rounded-md">

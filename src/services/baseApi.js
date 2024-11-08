@@ -3,7 +3,7 @@
 import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
 // import { logOut, setCredentials } from '../redux/auth/authSlice';
 import { API_BASE_URL } from '../util/config';
-import { getToken } from '../util/localStorage';
+import { getToken, setToken } from '../util/localStorage';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: API_BASE_URL,
@@ -21,7 +21,8 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
 
-    if (result.error && result.error.status === 403) {
+    console.log('result?.success', result?.data?.success)
+    if (!result?.data?.success) {
         console.log("baseApi is being defined...");
         const refreshResult = await baseQuery(
             {
@@ -34,6 +35,8 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
         if (refreshResult.data) {
             const { accessToken } = refreshResult.data;
+            console.log(refreshResult.data)
+            setToken(accessToken)
             // api.dispatch(setCredentials({ accessToken }));
             result = await baseQuery(args, api, extraOptions);
         } else {
@@ -46,7 +49,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
-    tagTypes: ['TripHistory'],
+    // tagTypes: ['TripHistory'],
     baseQuery: baseQueryWithReauth,
     endpoints: () => ({}),
 });

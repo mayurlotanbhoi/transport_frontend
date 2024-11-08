@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply font-satoshi font-normal text-base text-body bg-whiten relative z-1;
+    @apply font-satoshi font-normal text-base text-body bg-slate-200 relative z-1;
   }
 }
 
@@ -30,6 +30,16 @@
   .inbox-height {
     @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
   }
+}
+
+/* Custom class to hide scrollbar */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
 }
 
 :root {
@@ -63,7 +73,13 @@
   background-color: var(--primary-accent);
   color: var(--primary-dark);
 }
-
+.golden-gradian{
+  background: rgb(230,163,5);
+background: -moz-linear-gradient(90deg, rgba(230,163,5,1) 10%, rgba(254,236,20,1) 50%, rgba(230,163,5,1) 90%);
+background: -webkit-linear-gradient(90deg, rgba(230,163,5,1) 10%, rgba(254,236,20,1) 50%, rgba(230,163,5,1) 90%);
+background: linear-gradient(90deg, rgba(230,163,5,1) 10%, rgba(254,236,20,1) 50%, rgba(230,163,5,1) 90%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e6a305",endColorstr="#e6a305",GradientType=1);
+}
 
 /* .sinUpform_bg  {
 

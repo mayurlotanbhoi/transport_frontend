@@ -28,6 +28,7 @@ import { useRegisterVehicleMutation } from '../../services/vehicle.services';
 import { useCreateTripMutation } from '../../services/trip_history.service';
 import { IoMdSpeedometer } from 'react-icons/io';
 import { useSelector } from 'react-redux';
+import { CITY_API } from '../../util/config';
 const { Logo, appName } = appInfo
 
 
@@ -206,7 +207,7 @@ export default function CreatTrip() {
 
                                 {/* loading_city */}
                                 <ApiSearchDropDown
-                                    apiUrl="http://localhost:8000/api/v1/cities/search"
+                                    apiUrl={CITY_API}
                                     onSelect={handleSelect}
                                     searchingKey="cityName"
                                     setKey='loading_city'
@@ -219,7 +220,7 @@ export default function CreatTrip() {
 
                                 {/* unloading_city */}
                                 <ApiSearchDropDown
-                                    apiUrl="http://localhost:8000/api/v1/cities/search"
+                                    apiUrl={CITY_API}
                                     onSelect={handleSelect}
                                     searchingKey="cityName"
                                     setKey='unloading_city'
@@ -254,7 +255,7 @@ export default function CreatTrip() {
                                 />
                                 {/* load_weigth */}
                                 <SelectInput
-                                    // apiUrl="http://localhost:8000/api/v1/cities/search"
+                                    // apiUrl={CITY_API}
                                     onSelect={handleSelect}
                                     searchingKey="vehicale_capacity"
                                     setKey='load_weigth'
@@ -384,7 +385,7 @@ export default function CreatTrip() {
 
                                 {/* load_weigth */}
                                 <SelectInput
-                                    // apiUrl="http://localhost:8000/api/v1/cities/search"
+                                    // apiUrl={CITY_API}
                                     onSelect={handleSelect}
                                     searchingKey="lorry_number"
                                     setKey='vehicale_number'

@@ -16,17 +16,57 @@ export const tripHistoryApi = baseApi.injectEndpoints({
 
         // Get all trip histories
         getTrips: builder.query({
-            query: (id) => `/trips/getAllTripHistories/${id}`, // Use template literal to inject id
+            query: (id) => `/trips/getAllTripHistories`, // Use template literal to inject id
             providesTags: ['TripHistory'],
             refetchOnReconnect: true,    // Retry on reconnect
             refetchOnFocus: true,        // Retry when the component regains focus
             // keepUnusedDataFor: 60,       // Keep data for 60 seconds before refetching
         }),
 
+        getDownloadExelFormatAllTripHistories: builder.query({
+            async queryFn(format, _queryApi, _extraOptions, _fetchWithBQ) {
+                try {
+                    const response = await fetch(`http://localhost:8000/api/v1/trips/downloadExelFormatAllTripHistories/${format}`, {
+                        method: 'GET',
+                        credentials: 'include', // Ensure cookies are sent
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.statusText}`);
+                    }
+
+                    const blob = await response.blob();
+
+                    // Create a download link for the file immediately without storing in Redux state
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `trip_history.${format === 'excel' ? 'xlsx' : 'pdf'}`);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+
+                    // Return an empty object as `data` since we're not storing the blob in state
+                    return { data: {} };
+                } catch (error) {
+                    return { error: { status: error.status || 500, message: error.message } };
+                }
+            },
+            refetchOnReconnect: true,
+            refetchOnFocus: true,
+            // Disable caching for this query to avoid caching non-serializable values
+            keepUnusedDataFor: 0,
+        }),
+
+
+
+
+
+
 
         // Get a single trip history by ID
         getTrip: builder.query({
-            query: (id) => `/trip-history/${id}`,
+            query: (id) => `/trip-history`,
             providesTags: (result, error, id) => [{ type: 'TripHistory', id }],
         }),
 
@@ -56,7 +96,9 @@ export const tripHistoryApi = baseApi.injectEndpoints({
 export const {
     useCreateTripMutation,
     useGetTripsQuery,
+    useGetDownloadExelFormatAllTripHistoriesQuery,
     useGetTripQuery,
     useUpdateTripMutation,
     useDeleteTripMutation,
 } = tripHistoryApi;
+// useGetTripsQuery

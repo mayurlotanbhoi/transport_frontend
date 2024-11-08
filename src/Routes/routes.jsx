@@ -6,7 +6,7 @@ import Lorry from '../pages/Dashboards/Transpoter/pages/Lorry.jsx';
 import Trips from '../pages/Dashboards/Transpoter/pages/Trips.jsx';
 import CreatTrip from '../pages/Form/CreateTrip.jsx';
 import Calendar from '../pages/Calendar.tsx';
-import Profile from '../pages/Profile.tsx';
+import Profile from '../pages/Profile.jsx';
 import FormElements from '../pages/Form/FormElements.tsx';
 import FormLayout from '../pages/Form/FormLayout.tsx';
 import Tables from '../pages/Tables.tsx';
@@ -15,6 +15,10 @@ import Chart from '../pages/Chart.tsx';
 import Alerts from '../pages/UiElements/Alerts.tsx';
 import Buttons from '../pages/UiElements/Buttons.tsx';
 import TripCostCalculator from '../pages/Dashboards/Transpoter/componants/TripCostCalculator.jsx';
+import BusinessCard from '../pages/Dashboards/Transpoter/pages/BusinessCard.jsx';
+import PlanHistory from '../pages/Dashboards/Transpoter/pages/PlanHistory.jsx';
+import CreatParty from '../pages/Form/CreateParty.jsx';
+import Party from '../pages/Dashboards/Transpoter/pages/Party.jsx';
 // import TransDirectory from '../pages/publicPages/TransDirectory.jsx';
 // const Enquiry = lazy(() => import('../pages/Dashboard/pages/Enquiry.jsx'));
 // const CompanyEnquiry = lazy(() => import('../pages/Dashboard/pages/CompanyEnquiry.jsx'));
@@ -152,13 +156,43 @@ const routes = [
                 roles: ['user', 'admin'],
                 title: 'Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template',
             },
-            // {
-            //     path: 'jobs',
-            //     element: <Jobs />,
-            //     protected: true,
-            //     roles: ['user', 'admin'],
-            //     title: 'Signup | TailAdmin - Tailwind CSS Admin Dashboard Template',
-            // },
+            {
+                path: 'user-profile',
+                element: <Profile />,
+                protected: true,
+                roles: ['user', 'admin'],
+                title: 'Signup | TailAdmin - Tailwind CSS Admin Dashboard Template',
+            },
+            {
+                path: 'Business-Card',
+                element: <BusinessCard />,
+                protected: true,
+                roles: ['user', 'admin'],
+                title: 'Signup | TailAdmin - Tailwind CSS Admin Dashboard Template',
+            },
+            {
+                path: 'Plans-history',
+                element: <PlanHistory />,
+                protected: true,
+                roles: ['user', 'admin'],
+                title: 'Signup | TailAdmin - Tailwind CSS Admin Dashboard Template',
+            },
+            ,
+            {
+                path: 'creat-party',
+                element: <CreatParty />,
+                protected: true,
+                roles: ['user', 'admin'],
+                title: 'Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template',
+            },
+            ,
+            {
+                path: 'Party',
+                element: <Party />,
+                protected: true,
+                roles: ['user', 'admin'],
+                title: 'Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template',
+            },
             // {
             //     path: 'send-profile',
             //     element: <SendProfile />,

@@ -11,10 +11,12 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import { PublicHeader } from './pages/Landing/componats/Header.componats';
 import DefaultLayout from './layout/DefaultLayout';
+import { useCheckTokenOnRefresh } from './pages/Authentication/useCheckTokenOnRefresh';
 // import { PublicHeader } from "./pages/Landing/componats/Header.componats.jsx"
 
 function App() {
   const [loading, setLoading] = useState(true);
+  // useCheckTokenOnRefresh();
   const isAuthenticated = useSelector((state) => state.auth.isLogin);
   const { pathname } = useLocation();
 

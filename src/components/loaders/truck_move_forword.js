@@ -6,15 +6,16 @@ import TruckMoveForwordIcon from "../../images/loading/forword_move_truck.gif";
 
 const MySwal = withReactContent(Swal);
 
-const TrukLoaderMoveForword = (message) => {
-    const messageText = typeof message === 'string' ? message : "Loading...";
+const TrukLoaderMoveForword = (loadingMessage) => {
+    console.log("message", loadingMessage)
+    const messageText = typeof loadingMessage === 'string' ? loadingMessage : "Processing...";
 
     MySwal.fire({
         title: messageText,
         html: `
             <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
                 <img src="${TruckMoveForwordIcon}" alt="Loading..." style="width: 50px; height: 50px;"/>
-                <p style="margin-top: 10px;">${messageText || "Please wait, the process is ongoing..."}</p>
+                <p style="margin-top: 10px;">${"Please wait, the process is ongoing..."}</p>
             </div>
         `,
         showConfirmButton: false,

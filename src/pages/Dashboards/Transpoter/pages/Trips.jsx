@@ -1,25 +1,62 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import RunningStatus from './RunningSatatus'
 import TripsHistory from './TripHistory'
-import { useGetTripsQuery } from '../../../../services/trip_history.service';
+import { useGetDownloadExelFormatAllTripHistoriesQuery, useGetTripsQuery } from '../../../../services/trip_history.service';
 import TripCardSkeleton from '../../../../components/Skeletons/TripCardSkeleton';
 import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../../../util/config';
+import { getToken } from '../../../../util/localStorage';
+
+import DownloadButton from '../../../../util/ExcelAndPdfDown';
+
 
 export default function Trips() {
+    const [format, setFormat] = useState(null)
+    const [isDownloading, setDownloading] = useState(false)
 
-    const { data: trips, isLoading, error, refetch } = useGetTripsQuery(1);
+    const { data: trips, isLoading, error, refetch } = useGetTripsQuery();
 
-    // Retry fetching on mount if there is an error
+
     // useEffect(() => {
-    //     if (error) {
-    //         const retryInterval = setInterval(() => {
-    //             refetch();
-    //         }, 5000); // Retry every 5 seconds
+    //     // Define an async function inside useEffect to handle async/await
+    //     const handleDownload = async () => {
+    //         const token = getToken()
+    //         setDownloading(true)
+    //         try {
+    //             const response = await fetch(`${API_BASE_URL}/trips/downloadExelFormatAllTripHistories/${format}`, {
+    //                 method: 'GET',
+    //                 credentials: 'include', // Ensure cookies are senthe
+    //                 headers: {
+    //                     'Authorization': `Bearer ${token}`
+    //                 }
+    //             });
+    //             if (!response.ok) {
+    //                 throw new Error(`Error: ${response.statusText}`);
+    //             }
+    //             const blob = await response.blob();
+    //             // Create a download link for the file immediately
+    //             const url = window.URL.createObjectURL(blob);
+    //             const link = document.createElement('a');
+    //             link.href = url;
+    //             link.setAttribute('download', `trip_history.${format === 'excel' ? 'xlsx' : 'pdf'}`);
+    //             document.body.appendChild(link);
+    //             link.click();
+    //             link.remove();
+    //             console.log("Download initiated successfully");
+    //         } catch (error) {
+    //             console.error("Error downloading file:", error);
+    //         } finally {
+    //             setFormat(null)
+    //             setDownloading(false)
+    //         }
+    //     };
 
-    //         return () => clearInterval(retryInterval); // Clean up the interval on unmount
+    //     // Call the download function only if format is defined
+    //     if (format) {
+    //         handleDownload();
     //     }
-    // }, [error, refetch]);
+    // }, [format]); // Dependency array includes `format`
 
 
     if (isLoading) {
@@ -36,12 +73,29 @@ export default function Trips() {
     // console.log('trips', trips)
     return (
         <div>
-            <div className='flex justify-between bg-white shadow-md col-span-12 xl:col-span-8 dark:bg-black dark:text-white rounded-t-xl p-2'>
-                <h2 className="text-2xl font-semibold mb-5">Trips History</h2>
+            <div className='flex justify-between  shadow-md col-span-12 xl:col-span-8 dark:bg-black dark:text-white rounded-t-xl p-2'>
+                {/* <h2 className="text-2xl font-semibold mb-5">Trips History</h2> */}
 
-                <Link to={'/dashboard/creat-trip'} type="button" className="text-white flex items-center bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                    <IoMdAdd size={22} />  Add Trip
-                </Link>
+
+                {/* <div className="p-4 max-w-md mx-auto"> */}
+                {/* <h1 className="text-xl font-semibold mb-4">Download Trip History</h1> */}
+                <div className="flex flex-wrap sm:flex-row gap-2 mt-4 justify-center">
+                    <DownloadButton
+                        fileType="excel"
+                        endpoint={`${API_BASE_URL}/trips/downloadExelFormatAllTripHistories/excel`}
+                        buttonLabel="Download as Excel"
+                    />
+                    <DownloadButton
+                        fileType="pdf"
+                        endpoint={`${API_BASE_URL}/trips/downloadExelFormatAllTripHistories/pdf`}
+                        buttonLabel="Download as PDF"
+                    />
+                    <Link to={'/dashboard/creat-trip'} type="button" className="flex items-center justify-center bg-green-500 text-white px-4  rounded-md transition-transform duration-150 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-gre-400 focus:ring-offset-2 transform hover:scale-105 active:scale-95">
+                        <IoMdAdd />
+                        <span className="text-sm sm:text-base"> Add Trip</span>
+                    </Link>
+                </div>
+                {/* </div> */}
             </div>
             {/* <div className=' w-full flex justify-start items-center flex-wrap m-0 p-0'> */}
             <TripsHistory trips={trips} />
