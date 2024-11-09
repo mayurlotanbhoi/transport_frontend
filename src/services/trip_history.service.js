@@ -11,7 +11,7 @@ export const tripHistoryApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: newTrip,
             }),
-            invalidatesTags: ['TripHistory'],
+            invalidatesTags: ['TripHistory', 'vehicle'],
         }),
 
         // Get all trip histories

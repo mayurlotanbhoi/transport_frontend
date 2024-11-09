@@ -6,7 +6,7 @@ import { GiModernCity } from 'react-icons/gi';
 const SearchDropdown = ({ apiUrl, onSelect, setKey, className, searchingKey, label, optionIcon, icon, ...props }) => {
     const [query, setQuery] = useState('');
     const [options, setOptions] = useState([]);
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOption, setSelectedOption] = useState(true);
     const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -62,10 +62,14 @@ const SearchDropdown = ({ apiUrl, onSelect, setKey, className, searchingKey, lab
                     value={selectedOption?.[searchingKey] ? selectedOption?.[searchingKey] : query}
                     onChange={(e) => handleSearch(e)}
                     placeholder="Search..."
-                    className={className}
+                    className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+  ${!selectedOption ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+  dark:border-form-strokedark dark:bg-form-input dark:text-white `}
                     label={label}
                     icon={icon}
                     {...props}
+                    errorSms={!selectedOption && <p className="text-red-500 text-xs mt-1 ">Select the {label}</p>}
+
                 />
                 {isLoading &&
                     <ul className="absolute z-10 w-full mt-2 mx-h-[500px] overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg">

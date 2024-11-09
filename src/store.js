@@ -1,6 +1,8 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authReducer from './redux/auth/authSlice';
 import vehicleSlice from './redux/vehicle/vehicleSlice';
+import partiesSlice from './redux/party/partySlicer';
+
 import { tripHistoryApi } from './services/trip_history.service';
 import { vehicleApi } from './services/vehicle.services';
 import persistReducer from 'redux-persist/es/persistReducer';
@@ -42,10 +44,26 @@ const vehiclePersistConfig = {
     ]
 };
 
+const partyPersistConfig = {
+    key: 'party',
+    storage: storageSession,
+    // whitelist: ['vehicle'],
+    transforms: [
+        {
+            // Transform to encrypt the entire state before storing
+            in: (state) => encryptData(state),
+            // Transform to decrypt the entire state after retrieval
+            out: (state) => decryptData(state)
+        }
+    ]
+};
+
 // Combine reducers
 const rootReducer = combineReducers({
     auth: persistReducer(authPersistConfig, authReducer), // Persisted auth reducer
     vehicle: persistReducer(vehiclePersistConfig, vehicleSlice), // Persisted vehicle reducer
+    party: persistReducer(partyPersistConfig, partiesSlice), // Persisted vehicle reducer
+
     [vehicleApi.reducerPath]: vehicleApi.reducer,
     [tripHistoryApi.reducerPath]: tripHistoryApi.reducer,
     [partyApi.reducerPath]: partyApi.reducer,

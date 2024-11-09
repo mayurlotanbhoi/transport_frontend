@@ -60,11 +60,14 @@ const SelectInput = ({ apiUrl, onSelect, option, setKey, className, searchingKey
                     value={selectedOption ? selectedOption : query} // Show selected or typed value
                     onChange={(e) => handleSearch(e)}
                     placeholder="Search..."
-                    className={className}
+                    className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+                 ${query ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+                   dark:border-form-strokedark dark:bg-form-input dark:text-white `}
                     label={label}
                     icon={icon}
                     onFocus={handleFocus} // Open dropdown on focus
                     // onBlur={handleBlur} // Close dropdown on blur
+                    errorSms={!selectedOption && <p className="text-red-500 text-xs mt-1 ">Select the {label}</p>}
                     {...props}
                 />
 

@@ -196,7 +196,7 @@ const VehicleDetails = ({ vehicle }) => {
     const [truckDetails, setTruckDetails] = useState({ city: '', routes: '' });
     const toggleExpand = () => setIsExpanded(!isExpanded);
     const { logo, company_name, owner_name: transport, city: transpoterCity, mobile_number } = useSelector((state) => state.auth.user)
-    running
+
 
     // console.log("city", city)
     const {

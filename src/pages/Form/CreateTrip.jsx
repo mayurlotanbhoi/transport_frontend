@@ -74,11 +74,11 @@ export default function CreatTrip() {
     // const [registation, { data, isLoading, isError, isSuccess }] = useRegisterMutation()
     const [createTrip, { data, isLoading, isError, isSuccess }] = useCreateTripMutation();
     const { register, setValue, setError, getValues, clearErrors, handleSubmit, formState: { errors } } = useForm(tripFeilds);
-
     const { error, loading, vehicles_numbers } = useSelector(vehicle => vehicle.vehicle)
+    const { error: partieError, loading: partieLading, partiess } = useSelector(party => party.party)
 
-
-    console.log("vehicalesNumber", vehicles_numbers)
+    // console.log('partiess', partiess)
+    // console.log("vehicalesNumber", vehicles_numbers)
 
     const handleSelect = (setKey, option) => {
         console.log(setKey, option);
@@ -124,9 +124,7 @@ export default function CreatTrip() {
                 }
             );
         };
-
         handleFormSubmission()
-
     };
 
 
@@ -159,7 +157,7 @@ export default function CreatTrip() {
                             </h2>
                             <form className='text-black dark:text-white      grid grid-cols-1 sm:grid-cols-2 gap-x-2' onSubmit={handleSubmit(onSubmit)}>
                                 {/* Enter Party Name */}
-                                <InputField
+                                {/* <InputField
                                     type="text"
                                     placeholder="Enter Party Name..."
                                     label="Party Name"
@@ -185,7 +183,7 @@ export default function CreatTrip() {
                                     icon={<FaAsterisk size={22} />}
                                     errorSms={errors.Party_name && <p className="text-red-500 text-xs mt-1 ">{errors.Party_name.message}</p>}
                                 />
-                                {/* {Party_contact} */}
+                                {Party_contact}
                                 <InputField
                                     type="tel"
                                     placeholder="Party Mobile number..."
@@ -203,6 +201,19 @@ export default function CreatTrip() {
                                     onChange={(e) => handleChange("Party_contact", e)}
                                     icon={<FaPhoneAlt size={22} />}
                                     errorSms={errors.Party_contact && <p className="text-red-500 text-xs mt-1 ">{errors.Party_contact.message}</p>}
+                                /> */}
+
+
+                                <SelectInput
+                                    // apiUrl={CITY_API}
+                                    onSelect={handleSelect}
+                                    searchingKey="Select Yput Party"
+                                    setKey='Party'
+                                    // className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-green-500 focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-green-500"
+                                    icon={<TbWeight size={22} />}
+                                    label="Load weigth"
+                                    option={partiess.map((party) => (party?.name + " " + "ID =" + party?.party_id))}
+                                    optionIcon={<GiWeight className=' me-2' />}
                                 />
 
                                 {/* loading_city */}
@@ -259,7 +270,7 @@ export default function CreatTrip() {
                                     onSelect={handleSelect}
                                     searchingKey="vehicale_capacity"
                                     setKey='load_weigth'
-                                    className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-green-500 focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-green-500"
+                                    // className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-green-500 focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-green-500"
                                     icon={<TbWeight size={22} />}
                                     label="Load weigth"
                                     option={vehicleCapacities}
