@@ -19,6 +19,7 @@ import BusinessCard from '../pages/Dashboards/Transpoter/pages/BusinessCard.jsx'
 import PlanHistory from '../pages/Dashboards/Transpoter/pages/PlanHistory.jsx';
 import CreatParty from '../pages/Form/CreateParty.jsx';
 import Party from '../pages/Dashboards/Transpoter/pages/Party.jsx';
+import { PostLoadCard } from '../pages/Dashboards/Transpoter/pages/Loadcard.jsx';
 // import TransDirectory from '../pages/publicPages/TransDirectory.jsx';
 // const Enquiry = lazy(() => import('../pages/Dashboard/pages/Enquiry.jsx'));
 // const CompanyEnquiry = lazy(() => import('../pages/Dashboard/pages/CompanyEnquiry.jsx'));
@@ -166,6 +167,13 @@ const routes = [
             {
                 path: 'Business-Card',
                 element: <BusinessCard />,
+                protected: true,
+                roles: ['user', 'admin'],
+                title: 'Signup | TailAdmin - Tailwind CSS Admin Dashboard Template',
+            },
+            {
+                path: 'creat-load-Card',
+                element: <PostLoadCard />,
                 protected: true,
                 roles: ['user', 'admin'],
                 title: 'Signup | TailAdmin - Tailwind CSS Admin Dashboard Template',

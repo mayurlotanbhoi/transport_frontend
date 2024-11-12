@@ -54,7 +54,7 @@ export default function Party() {
                     />
                     <Link to={'/dashboard/creat-party'} type="button" className="flex items-center justify-center bg-green-500 text-white px-4  rounded-md transition-transform duration-150 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-gre-400 focus:ring-offset-2 transform hover:scale-105 active:scale-95">
                         <IoMdAdd />
-                        <span className="text-sm sm:text-base"> Add Trip</span>
+                        <span className="text-sm sm:text-base"> Add Party</span>
                     </Link>
                 </div>
                 {/* </div> */}

@@ -80,6 +80,42 @@ background: -webkit-linear-gradient(90deg, rgba(230,163,5,1) 10%, rgba(254,236,2
 background: linear-gradient(90deg, rgba(230,163,5,1) 10%, rgba(254,236,20,1) 50%, rgba(230,163,5,1) 90%);
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e6a305",endColorstr="#e6a305",GradientType=1);
 }
+.diwali-bulb-border {
+  position: relative;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.diwali-bulb-border::before,
+.diwali-bulb-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.5rem;
+  padding: 8px;
+  pointer-events: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-around;
+}
+
+.diwali-bulb-border::before {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  pointer-events: none;
+  z-index: -1;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  mask-image: radial-gradient(circle at center, black 50%, transparent 75%);
+  background-image: repeating-radial
+}
+
 
 /* .sinUpform_bg  {
 

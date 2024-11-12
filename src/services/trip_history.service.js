@@ -14,6 +14,16 @@ export const tripHistoryApi = baseApi.injectEndpoints({
             invalidatesTags: ['TripHistory', 'vehicle'],
         }),
 
+        updayeTripPayment: builder.mutation({
+            query: (updateTrip) => ({
+                url: '/trips/update-trip-Payments',
+                method: 'PUT',
+                body: updateTrip,
+            }),
+            invalidatesTags: ['TripHistory'],
+        }),
+
+
         // Get all trip histories
         getTrips: builder.query({
             query: (id) => `/trips/getAllTripHistories`, // Use template literal to inject id
@@ -95,6 +105,7 @@ export const tripHistoryApi = baseApi.injectEndpoints({
 // Export hooks for usage in functional components
 export const {
     useCreateTripMutation,
+    useUpdayeTripPaymentMutation,
     useGetTripsQuery,
     useGetDownloadExelFormatAllTripHistoriesQuery,
     useGetTripQuery,

@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
-import { FaTruck, FaClock, FaTachometerAlt, FaTruckMoving, FaUserCircle } from 'react-icons/fa';
+import React, { useLayoutEffect, useState } from 'react';
+import { FaTruck, FaClock, FaTachometerAlt, FaTruckMoving, FaUserCircle, FaRupeeSign } from 'react-icons/fa';
 import { FaTruckArrowRight, FaUser } from 'react-icons/fa6';
 import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { PiSteeringWheelFill } from "react-icons/pi";
 import { FcCallback } from "react-icons/fc";
+import { Modal } from '../../../../components/popups/Modal';
+import DatePicker from '../../../../components/Forms/formsInputs/DatePicker';
+import InputField from '../../../../components/Forms/formsInputs/InputField';
+import { useForm } from 'react-hook-form';
+import { handleRequest } from '../../../../util/handleRequest';
+import { useCreateTripMutation, useUpdayeTripPaymentMutation } from '../../../../services/trip_history.service';
+// import { Modal } from '../../../../components/ModalSettings';
 
 
 // const calculateProgress = (status) => {
@@ -70,48 +77,73 @@ export const calculateEstimatedTime = (status) => {
 
 export default function TripsHistory({ trips }) {
 
-    console.log("trips", trips)
+    // console.log("trips", trips)
+    const { register, setValue, setError, getValues, reset, clearErrors, handleSubmit, formState: { errors } } = useForm();
+    const [updayeTripPayment, { data, isLoading, isError, isSuccess }] = useUpdayeTripPaymentMutation();
 
     const [expanded, setExpanded] = useState(null); // To track the expanded state of each card
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [updatePayment, setUpdatePayment] = useState({ trip_id: "", cumition: "", balance: "" })
 
-    const currentLorryRunningStatus = [
-        {
-            from: "Pune",
-            to: "Indore",
-            speed: 60, // speed in km/h
-            leaveTime: "2024-10-26T08:30:00Z", // ISO string for date and time
-            totalDistance: 600, // in km
-            lorryNumber: "MH G02 1912 ",
-            eta: "2024-10-27T18:00:00Z" // ISO string for ETA
-        },
-        {
-            from: "Mumbai",
-            to: "Delhi",
-            speed: 80,
-            leaveTime: "2024-09-01T07:00:00Z",
-            totalDistance: 1450,
-            lorryNumber: "MH G02 1912 ",
-            eta: "2024-09-02T10:00:00Z"
-        },
-        {
-            from: "Bangalore",
-            to: "Hyderabad",
-            speed: 55,
-            leaveTime: "2024-09-01T06:00:00Z",
-            totalDistance: 570,
-            lorryNumber: "MH G02 1912 ",
-            eta: "2024-09-01T12:00:00Z"
-        },
-        {
-            from: "Chennai",
-            to: "Kolkata",
-            speed: 70,
-            leaveTime: "2024-09-01T05:30:00Z",
-            totalDistance: 1670,
-            lorryNumber: "MH G02 1912 ",
-            eta: "2024-09-02T14:00:00Z"
-        }
-    ];
+    useLayoutEffect(() => {
+        setValue("cumition", updatePayment?.cumition)
+        setValue("balance", updatePayment?.balance)
+    }, [updatePayment?.trip_id,])
+
+
+    const dateHandleChange = (fieldName, date) => {
+        // Assuming the DatePicker provides the `date` directly
+        setValue(fieldName, date, { shouldValidate: true });
+    };
+
+    const handleChange = (fieldName, e) => {
+
+        console.log("fieldName, e", fieldName, e)
+        let value = e.target.value
+        setValue(fieldName, value, { shouldValidate: true });
+    };
+
+
+    const onSubmit = async (data) => {
+        // const formData = new FormData();
+
+        // for (const key in data) {
+        //   if (key === 'logo') {
+        //     formData.append(key, data[key][0]); // Assuming `data[key]` is a FileList
+        //   } else if (key === 'city') {
+        //     formData.append(key, JSON.stringify(data[key])); // Convert city object to JSON
+        //   } else {
+        //     formData.append(key, data[key]);
+        //   }
+        // }
+        data.trip_id = updatePayment.trip_id
+
+
+        // console.log("trip details", data);
+
+        // return
+        // return;
+        // const formData = FormDataConverter(data)
+        // console.log("formData", formData)
+
+        const handleFormSubmission = async () => {
+            await handleRequest(
+                () => updayeTripPayment(data),  // The API call function
+                {
+                    loadingMessage: "Updating Trip Final Payment...",
+                    successMessage: "Your  Trip Final Payment Update SuccessFully. ",
+                    errorMessage: "There was an issue while your Updating Trip Final Payment. Please try again later."
+                }
+            );
+        };
+        handleFormSubmission()
+    };
+
+    const modelClose = () => {
+        setUpdatePayment({ trip_id: "", cumition: "", balance: "" })
+        setIsModalOpen(false)
+        reset()
+    }
 
     // const calculateProgress = (status) => {
     //     const now = new Date();
@@ -136,25 +168,136 @@ export default function TripsHistory({ trips }) {
     // };
 
     return (
-        <div className="col-span-12 xl:col-span-8 dark:bg-black dark:text-white rounded-t-xl ">
+        <>
 
 
-            <div className=' w-full flex flex-wrap justify-start gap-2 '>
-                {trips.map((status, index) => {
-                    {/* const progress = calculateProgress(status);
+            {/* Modal Component */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => modelClose()}
+            >
+                <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">Complet Trip Add Final Payment {updatePayment?.trip_ids}</h2>
+                <form className='  text-black  dark:text-white       grid grid-cols-1 sm:grid-cols-2 gap-x-2' onSubmit={handleSubmit(onSubmit)}>
+                    <div className=' mt-[0.6rem]'>
+                        <InputField
+                            type="text"
+                            placeholder="Payment amount in rupees..."
+                            label="Payment Amount"
+                            className={`w-full rounded-lg border  bg-transparent py-3 pl-6 pr-10 outline-none focus-visible:shadow-none 
+  ${errors.full_payment ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+  dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                            {...register("full_payment", {
+                                required: "Please enter the payment amount",
+                                pattern: {
+                                    value: /^[0-9]+$/,
+                                    message: "Amount should be a valid number"
+                                },
+                                min: {
+                                    value: 0,
+                                    message: "Amount should be 0 or greater"
+                                }
+                            })}
+                            onChange={(e) => handleChange("full_payment", e)}
+                            icon={<FaRupeeSign size={20} />}
+                            errorSms={errors.full_payment && <p className="text-red-500 text-xs mt-1 ">{errors.full_payment.message}</p>}
+                        />
+                    </div>
+                    {/* Balance */}
+                    <InputField
+                        type="text"
+                        placeholder="Balance amount in rupees..."
+                        label="Balance Amount"
+                        className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+  ${errors.balance ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+  dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                        {...register("balance", {
+                            required: "Please enter the balance amount",
+                            pattern: {
+                                value: /^[0-9]+$/,
+                                message: "Amount should be a valid number"
+                            },
+                            min: {
+                                value: 0,
+                                message: "Amount should be 0 or greater"
+                            }
+                        })}
+                        onChange={(e) => handleChange("balance", e)}
+                        icon={<FaRupeeSign size={22} />}
+                        errorSms={errors.balance && <p className="text-red-500 text-xs mt-1 ">{errors.balance.message}</p>}
+                    />
+                    {/* Cumition */}
+                    <InputField
+                        type="text"
+                        placeholder="Cumition amount in rupees..."
+                        label="Cumition Amount"
+                        className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 outline-none focus-visible:shadow-none 
+  ${errors.cumition ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500 "} 
+  dark:border-form-strokedark dark:bg-form-input dark:text-white `}
+                        {...register("cumition", {
+                            required: "Please enter the cumition amount",
+
+                            pattern: {
+                                value: /^[0-9]+$/,
+                                message: "Amount should be a valid number"
+                            },
+                            min: {
+                                value: 0,
+                                message: "Amount should be 0 or greater"
+                            }
+                        })}
+                        onChange={(e) => handleChange("cumition", e)}
+                        icon={<FaRupeeSign size={22} />}
+                        errorSms={errors.cumition && <p className="text-red-500 text-xs mt-1 ">{errors.cumition.message}</p>}
+                    />
+                    {/* payment_date */}
+                    <DatePicker
+                        label="Payment Date"
+                        placeholder="Select Paymentssss date"
+                        // onChange={(e) => handleChange("payment_date", e)}
+                        setValue={setValue}
+                        setKey="payment_date"
+                        dateFormat="d M, Y"
+                        className={`w-full cursor-pointer rounded-lg border bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-white file:py-3 file:px-5 file:hover:bg-primary file:hover:text-white file:hover:bg-opacity-10
+                                   ${errors.payment_date ? "border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 " : " border-stroke focus:border-green-500 dark:focus:border-green-500"} 
+                                    disabled:cursor-default disabled:bg-white dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white`}
+                        {...register("payment_date", {
+                            required: "Please payment  date",
+                        })}
+                        errorSms={errors.payment_date && <p className="text-red-500 text-xs mt-1">{errors.payment_date.message}</p>}
+                    />
+                    {errors.payment_date && <p className="text-red-500 text-xs mt-1">{errors.payment_date.message}</p>}
+
+
+
+                    <div className="my-5 col-span-full">
+                        <input
+                            type="submit"
+                            value="Add Trip"
+                            className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+                        />
+                    </div>
+                </form>
+            </Modal>
+
+            <div className="col-span-12 xl:col-span-8 dark:bg-black dark:text-white rounded-t-xl ">
+
+
+                <div className=' w-full flex flex-wrap justify-start gap-2 '>
+                    {trips.map((status, index) => {
+                        {/* const progress = calculateProgress(status);
                     const estimatedTime = calculateEstimatedTime(status); */}
-                    const isExpanded = expanded === index; // Track which card is expanded
+                        const isExpanded = expanded === index; // Track which card is expanded
 
-                    return (
-                        <div className=' w-full sm:max-w-[20rem]' key={index}>
-                            <TripCard isExpanded={isExpanded} index={index} setExpanded={setExpanded} LorryRunningStatus={status} />
-                        </div>
+                        return (
+                            <div className=' w-full sm:max-w-[20rem]' key={index}>
+                                <TripCard isExpanded={isExpanded} index={index} setExpanded={setExpanded} LorryRunningStatus={status} setIsModalOpen={setIsModalOpen} setUpdatePayment={setUpdatePayment} />
+                            </div>
 
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
-        </div>
-
+        </>
     );
 }
 
@@ -162,9 +305,11 @@ export default function TripsHistory({ trips }) {
 
 // import { FaTruckArrowRight } from 'react-icons/fa';
 
-const TripCard = ({ isExpanded, setExpanded, index, LorryRunningStatus }) => {
-    const {
+const TripCard = ({ isExpanded, setExpanded, index, LorryRunningStatus, setIsModalOpen, setUpdatePayment }) => {
 
+
+
+    const {
         Party_contact,
         Party_name,
         advance,
@@ -185,9 +330,15 @@ const TripCard = ({ isExpanded, setExpanded, index, LorryRunningStatus }) => {
         user_id,
         vehicale_number,
         payment_date,
+        full_payment
 
     } = LorryRunningStatus;
 
+    const setUpateData = (trip_id, cumition, balance) => {
+        console.log("trip_id, cumition ", trip_id, cumition, balance)
+        setUpdatePayment({ trip_id, cumition, balance });
+        setIsModalOpen(true);
+    };
 
     const progress = calculateProgress(LorryRunningStatus?.createdAt, LorryRunningStatus?.speed_per_hr, LorryRunningStatus?.distance_km,);
     const estimatedTime = calculateEstimatedTime(LorryRunningStatus);
@@ -293,7 +444,7 @@ const TripCard = ({ isExpanded, setExpanded, index, LorryRunningStatus }) => {
                         </div>
                     </div>
                     {/* Action Buttons */}
-                    <div className="flex justify-between items-center mt-6">
+                    <div onClick={() => setUpateData(trip_id, cumition, balance)} className="flex justify-between items-center mt-6">
                         <button className="bg-white border border-green-600 text-green-600 px-4 py-2 rounded-md">
                             Complete Trip
                         </button>
@@ -312,16 +463,16 @@ const TripCard = ({ isExpanded, setExpanded, index, LorryRunningStatus }) => {
                         {/* Freight Adjustments */}
                         <div className="mt-2 text-sm">
                             <div className="flex justify-between text-gray-500">
-                                <span>(-) Advance</span>
+                                <span> Advance</span>
                                 <span>₹{advance}</span>
                             </div>
                             <div className="flex justify-between mt-2 text-gray-500">
-                                <span>(+) cumition</span>
+                                <span> cumition</span>
                                 <span>₹{cumition}</span>
                             </div>
                             <div className="flex justify-between mt-2 text-gray-500">
-                                <span>(-) Payments</span>
-                                <span>₹0</span>
+                                <span>Payments</span>
+                                <span>₹{full_payment}</span>
                             </div>
                         </div>
                     </div>
@@ -334,15 +485,15 @@ const TripCard = ({ isExpanded, setExpanded, index, LorryRunningStatus }) => {
                         </div>
 
                         {/* Note and Request Money */}
-                        <div className="flex justify-end items-center mt-4">
-                            {/* <div className="flex items-center text-blue-600 cursor-pointer">
+                        {/* <div className="flex justify-end items-center mt-4"> */}
+                        {/* <div className="flex items-center text-blue-600 cursor-pointer">
                                 <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                                 </svg>
                                 <span>Note</span>
                             </div> */}
-                            <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded-md">Request Money</button>
-                        </div>
+                        {/* <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded-md">Request Money</button> */}
+                        {/* </div> */}
                     </div>
                 </>
             )}

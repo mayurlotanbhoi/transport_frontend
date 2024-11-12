@@ -6,7 +6,7 @@ const InputField = forwardRef(({ type = 'text', icon, label, onChange, placehold
   return (
 
     <div className='col-span-1'>
-      <label htmlFor={id} className="mb-3 block font-medium text-black dark:text-white">
+      <label htmlFor={id} className="mb-2 block font-medium text-black dark:text-white">
         {label}
       </label>
       <div className="relative">

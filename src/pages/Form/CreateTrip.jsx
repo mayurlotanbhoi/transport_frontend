@@ -96,6 +96,7 @@ export default function CreatTrip() {
         // Assuming the DatePicker provides the `date` directly
         setValue(fieldName, date, { shouldValidate: true });
     };
+    
     const onSubmit = async (data) => {
         // const formData = new FormData();
 

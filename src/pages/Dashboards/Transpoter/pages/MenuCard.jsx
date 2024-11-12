@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaAddressCard, FaCalculator, FaHistory, FaRegBuilding, FaTruckMoving, } from 'react-icons/fa'
+import { FaAddressCard, FaCalculator, FaHistory, FaRegBuilding, FaTruckLoading, FaTruckMoving, } from 'react-icons/fa'
 import { FaPersonRunning } from 'react-icons/fa6'
 import { CiUser } from "react-icons/ci";
 import { MdHistory, MdOutlineEmojiTransportation } from 'react-icons/md'
@@ -47,6 +47,12 @@ export default function MenuCard() {
         icon: <FaAddressCard size={30} style={{ strokeWidth: 1 }} />,
         path: "/Business-Card",
         name: "Business Card",
+    },
+
+    {
+        icon: <FaTruckLoading size={30} style={{ strokeWidth: 1 }} />,
+        path: "/creat-load-Card",
+        name: "Load Shear",
     },
 
 

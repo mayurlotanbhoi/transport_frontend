@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import Logo from '../../images/logo/logo.svg';
+import { FaPlus, FaTruckLoading } from 'react-icons/fa';
+import { FaBuildingCircleArrowRight } from 'react-icons/fa6';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -180,9 +182,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              eCommerce
+                              Home
                             </NavLink>
                           </li>
+
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -218,6 +221,51 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* <!-- Menu Item Calendar --> */}
 
+              <li>
+                <NavLink
+                  to="/dashboard/trips"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('trips') && 'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                  <FaTruckLoading />
+                  Trip's
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/dashboard/creat-trip"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('creat-trip') && 'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                  <FaPlus />
+                  Add Trip
+                </NavLink>
+              </li>
+
+
+              <li>
+                <NavLink
+                  to="/dashboard/party"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('party') && 'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                  <FaBuildingCircleArrowRight />
+                  Party's
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/dashboard/creat-party"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('creat-party') && 'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                  <FaPlus />
+                  Add Party's
+                </NavLink>
+              </li>
+
               {/* <!-- Menu Item Profile --> */}
               <li>
                 <NavLink
@@ -246,6 +294,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </li>
               {/* <!-- Menu Item Profile --> */}
+
+
 
               {/* <!-- Menu Item Forms --> */}
               <SidebarLinkGroup
