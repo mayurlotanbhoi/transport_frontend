@@ -30,7 +30,7 @@ export const tripHistoryApi = baseApi.injectEndpoints({
             providesTags: ['TripHistory'],
             refetchOnReconnect: true,    // Retry on reconnect
             refetchOnFocus: true,        // Retry when the component regains focus
-            // keepUnusedDataFor: 60,       // Keep data for 60 seconds before refetching
+            keepUnusedDataFor: 60,       // Keep data for 60 seconds before refetching
         }),
 
         getDownloadExelFormatAllTripHistories: builder.query({

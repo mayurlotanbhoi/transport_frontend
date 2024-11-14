@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
@@ -12,26 +12,47 @@ import Header from './components/Header';
 import { PublicHeader } from './pages/Landing/componats/Header.componats';
 import DefaultLayout from './layout/DefaultLayout';
 import { useCheckTokenOnRefresh } from './pages/Authentication/useCheckTokenOnRefresh';
+import { useReAuthQuery } from './services/auth-service';
+import { setCredentials } from './redux/auth/authSlice';
 // import { PublicHeader } from "./pages/Landing/componats/Header.componats.jsx"
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  // useCheckTokenOnRefresh();
+  const { data: authResponse, isLoading, error, refetch } = useReAuthQuery();
   const isAuthenticated = useSelector((state) => state.auth.isLogin);
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // When data is fetched, handle authentication status
+    if (!isLoading && authResponse) {
+      console.log("authResponse.success", authResponse.success)
+      if (authResponse.success) {
+        const { accessToken, user } = authResponse.data;
+        dispatch(setCredentials({ accessToken, user }));
+        navigate('/dashboard')
+      } else {
+        dispatch(logOut());
+        navigate('/auth/signin');
+      }
+    }
+
+    if (error) {
+      console.error("ReAuth error:", error);
+      dispatch(logOut());
+      navigate('/auth/signin');
+    }
+  }, [authResponse, isLoading, error,]);
+
+  useEffect(() => {
+    // Scroll to top on location change
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <Loader />;
   }
+
 
   const renderRoutes = (routesArray) => {
     return routesArray.map((route, index) => {

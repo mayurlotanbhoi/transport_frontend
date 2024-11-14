@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import LogoDark from '../../images/logo/logo-dark.svg';
 // import Logo from '../../images/logo/logo.svg';
-import { FaAddressCard, FaAsterisk, FaCity, FaCreditCard, FaIdCard, FaImage, FaLandmark, FaMapMarkerAlt, FaPhoneAlt, FaRupeeSign, FaTruckMoving, } from 'react-icons/fa';
+import { FaAddressCard, FaAsterisk, FaCity, FaCreditCard, FaHospitalUser, FaIdCard, FaImage, FaLandmark, FaMapMarkerAlt, FaPhoneAlt, FaRupeeSign, FaTruckMoving, } from 'react-icons/fa';
 import InputField from '../../components/Forms/formsInputs/InputField';
 import { ApiSearchDropDown, SelectInput } from '../../components/Forms/formsInputs';
 import { useForm } from 'react-hook-form';
-import { FaRegUser, } from "react-icons/fa6";
+import { FaLocationDot, FaRegUser, } from "react-icons/fa6";
 import { IoSearchSharp } from "react-icons/io5";
 import { MdImageSearch, MdOutlineMobileScreenShare, MdOutlineHomeWork, MdLockOutline, MdOutlineMailOutline, MdOutlineDescription } from "react-icons/md";
 import InputTextarea from '../../components/Forms/formsInputs/InputTextarea';
@@ -96,7 +96,7 @@ export default function CreatTrip() {
         // Assuming the DatePicker provides the `date` directly
         setValue(fieldName, date, { shouldValidate: true });
     };
-    
+
     const onSubmit = async (data) => {
         // const formData = new FormData();
 
@@ -208,13 +208,13 @@ export default function CreatTrip() {
                                 <SelectInput
                                     // apiUrl={CITY_API}
                                     onSelect={handleSelect}
-                                    searchingKey="Select Yput Party"
+                                    searchingKey="Select Your Party"
                                     setKey='Party'
                                     // className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-green-500 focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-green-500"
-                                    icon={<TbWeight size={22} />}
-                                    label="Load weigth"
+                                    icon={<FaHospitalUser size={22} />}
+                                    label="Select Partie's"
                                     option={partiess.map((party) => (party?.name + " " + "ID =" + party?.party_id))}
-                                    optionIcon={<GiWeight className=' me-2' />}
+                                    optionIcon={<FaHospitalUser className=' me-2' />}
                                 />
 
                                 {/* loading_city */}
@@ -224,7 +224,7 @@ export default function CreatTrip() {
                                     searchingKey="cityName"
                                     setKey='loading_city'
                                     className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-green-500 focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-green-500"
-                                    icon={<FaCity size={22} />}
+                                    icon={<FaLocationDot size={22} />}
                                     label="Loading city"
                                     optionIcon={<GiModernCity className=' me-2' />}
 
@@ -237,7 +237,7 @@ export default function CreatTrip() {
                                     searchingKey="cityName"
                                     setKey='unloading_city'
                                     className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-green-500 focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-green-500"
-                                    icon={<FaCity size={22} />}
+                                    icon={<FaLocationDot size={22} />}
                                     label="Unloading city"
                                     optionIcon={<GiModernCity className=' me-2' />}
                                 />

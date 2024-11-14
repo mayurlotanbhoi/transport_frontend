@@ -19,6 +19,7 @@ export const vehicleApi = baseApi.injectEndpoints({
             providesTags: ['vehicle'],
             refetchOnReconnect: true,    // Retry on reconnect
             refetchOnFocus: true,
+            keepUnusedDataFor: 60,       // Keep data for 60 seconds before refetching
             // Use onQueryStarted to dispatch data to the Redux store
             async onQueryStarted(args, { dispatch, queryFulfilled }) {
                 try {

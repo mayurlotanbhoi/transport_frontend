@@ -1,6 +1,6 @@
 // src/features/auth/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { authApi } from '../../services/auth-service';
+// import { authApi } from '../../services/auth-service';
 
 
 const initialState = { user: null, accessToken: null, isLogin: false }
@@ -21,32 +21,32 @@ const authSlice = createSlice({
             state.isLogin = false
         },
     },
-    extraReducers: (builder) => {
-        builder
-            .addMatcher(
-                authApi.endpoints.login.matchFulfilled,
-                (state, { payload }) => {
-                    const { access_token, user } = payload;
-                    state.accessToken = access_token;
-                    state.user = user || null;
-                    state.isLogin = access_token || false
-                }
-            )
-            .addMatcher(
-                authApi.endpoints.refreshToken.matchFulfilled,
-                (state, { payload }) => {
-                    const { access_token } = payload;
-                    state.accessToken = access_token;
-                }
-            )
-            .addMatcher(
-                authApi.endpoints.logout.matchFulfilled,
-                (state) => {
-                    state.accessToken = null;
-                    state.user = null;
-                }
-            );
-    },
+    // extraReducers: (builder) => {
+    //     builder
+    //         .addMatcher(
+    //             authApi.endpoints.login.matchFulfilled,
+    //             (state, { payload }) => {
+    //                 const { access_token, user } = payload;
+    //                 state.accessToken = access_token;
+    //                 state.user = user || null;
+    //                 state.isLogin = access_token || false
+    //             }
+    //         )
+    //         .addMatcher(
+    //             authApi.endpoints.refreshToken.matchFulfilled,
+    //             (state, { payload }) => {
+    //                 const { access_token } = payload;
+    //                 state.accessToken = access_token;
+    //             }
+    //         )
+    //         .addMatcher(
+    //             authApi.endpoints.logout.matchFulfilled,
+    //             (state) => {
+    //                 state.accessToken = null;
+    //                 state.user = null;
+    //             }
+    //         );
+    // },
 });
 
 export const { setCredentials, logOut } = authSlice.actions;

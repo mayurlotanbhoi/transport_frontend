@@ -14,6 +14,7 @@ export const authApi = baseApi.injectEndpoints({
                 body: credentials,
             }),
         }),
+
         register: builder.mutation({
             query: (data) => ({
                 url: '/user/register',
@@ -25,6 +26,13 @@ export const authApi = baseApi.injectEndpoints({
             query: () => ({
                 url: '/auth/refresh-token',
                 method: 'POST',
+            }),
+        }),
+
+        reAuth: builder.query({
+            query: () => ({
+                url: '/auth/re-auth',
+                method: 'GET',
             }),
         }),
 
@@ -54,6 +62,7 @@ export const {
     useLoginMutation,
     useRegisterMutation,
     useRefreshTokenMutation,
+    useReAuthQuery,
     useLogoutMutation,
     useGetProtectedQuery,
 } = authApi;

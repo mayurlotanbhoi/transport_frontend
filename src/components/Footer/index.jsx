@@ -11,9 +11,9 @@ const Footer = () => {
                     <p className="mb-4">
                         We provide reliable transport services across the country, connecting businesses with their transportation needs.
                     </p>
-                    <p><FaMapMarkerAlt className="inline mr-2" />123 Transport St, City, Country</p>
-                    <p><FaPhoneAlt className="inline mr-2" />+123 456 7890</p>
-                    <p><FaEnvelope className="inline mr-2" />VishalPorwal@transportcompany.com</p>
+                    <p><FaMapMarkerAlt className="inline mr-2" /> Nandurbar, Maharashtra, India</p>
+                    <p><FaPhoneAlt className="inline mr-2" />8766988606</p>
+                    <p><FaEnvelope className="inline mr-2" />mayurbhoi200@gmail.com</p>
                 </div>
 
                 {/* Quick Links */}

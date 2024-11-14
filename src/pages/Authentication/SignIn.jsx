@@ -10,6 +10,7 @@ import { handleRequest } from '../../util/handleRequest';
 import { setCredentials } from '../../redux/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../util/localStorage';
+import { AllInOneLogo } from '../../components/Logo/Logo';
 
 const SignIn = () => {
   const [login, { data, isLoading, isError, error }] = useLoginMutation();
@@ -55,17 +56,18 @@ const SignIn = () => {
     <>
       {/* <Breadcrumb pageName="Sign In" /> */}
 
-      <div className="rounded-sm border bg-black border-stroke  shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="rounded-sm border bg-white border-stroke  shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
               <Link className="mb-5.5 inline-block" to="/">
-                <img className="hidden dark:block" src={Logo} alt="Logo" />
-                <img className="dark:hidden" src={LogoDark} alt="Logo" />
+                {/* <img className="hidden dark:block" src={Logo} alt="Logo" /> */}
+                {/* <h1 className=' text-2xl'>TransBook</h1> */}
+                <AllInOneLogo />
+                {/* <img className="dark:hidden" src={LogoDark} alt="Logo" /> */}
               </Link>
               <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
+                Streamlining Transport, Empowering Growth
               </p>
 
               <span className="mt-15 inline-block">
@@ -197,11 +199,10 @@ const SignIn = () => {
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               <span className="mb-1.5 block font-medium">Start for free</span>
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign In to TailAdmin
+                Sign In to TransBook
               </h2>
 
-              <form className='text-white' onSubmit={handleSubmit(onSubmit)}
-              >
+              <form className='' onSubmit={handleSubmit(onSubmit)} >
                 {/* <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
@@ -324,7 +325,7 @@ const SignIn = () => {
                   />
                 </div>
 
-                <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+                {/* <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                   <span>
                     <svg
                       width="20"
@@ -359,13 +360,12 @@ const SignIn = () => {
                     </svg>
                   </span>
                   Sign in with Google
-                </button>
+                </button> */}
 
                 <div className="mt-6 text-center">
                   <p>
-                    Don’t have any account?{' '}
                     <Link to="/auth/signup" className="text-primary">
-                      Sign Up
+                      <span className=' text-black'>Don’t have any account?</span>    Sign Up
                     </Link>
                   </p>
                 </div>

@@ -47,7 +47,7 @@ export const PublicHeader = () => {
                 <PopoverGroup onClick={() => setMobileMenuOpen(pre => false)} className="hidden lg:flex lg:gap-x-12">
                     <Popover className="relative">
                         <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-                            Product
+                            {/* Product */}
                             {/* <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-400" /> */}
                         </PopoverButton>
 
@@ -89,7 +89,7 @@ export const PublicHeader = () => {
                         </PopoverPanel>
                     </Popover>
 
-                    <Link to="/dashboard" className="text-sm font-semibold leading-6 text-gray-900">
+                    {/* <Link to="/dashboard" className="text-sm font-semibold leading-6 text-gray-900">
                         dashboard
                     </Link>
 
@@ -101,7 +101,7 @@ export const PublicHeader = () => {
                     </Link>
                     <Link to="#" className="text-sm font-semibold leading-6 text-gray-900">
                         Company
-                    </Link>
+                    </Link> */}
                 </PopoverGroup>
                 <div onClick={() => setMobileMenuOpen(pre => false)} className="hidden lg:flex lg:flex-1 lg:justify-end">
                     <Link to="/auth/signin" className="text-sm font-semibold leading-6 text-gray-900">
@@ -146,7 +146,7 @@ export const PublicHeader = () => {
                             <div className="space-y-2 py-6">
                                 <Disclosure as="div" className="-mx-3">
                                     <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                                        Product
+                                        {/* Product */}
                                         {/* <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none group-data-[open]:rotate-180" /> */}
 
                                     </DisclosureButton>
@@ -163,7 +163,7 @@ export const PublicHeader = () => {
                                         ))}
                                     </DisclosurePanel>
                                 </Disclosure>
-                                <Link to="/dashboard" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                {/* <Link to="/dashboard" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                                     dashboard
                                 </Link>
                                 <Link
@@ -183,7 +183,7 @@ export const PublicHeader = () => {
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Company
-                                </Link>
+                                </Link> */}
                             </div>
                             <div className="py-6">
                                 <Link

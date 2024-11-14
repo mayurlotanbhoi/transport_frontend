@@ -1,9 +1,9 @@
 // baseApi.js
-
 import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
-// import { logOut, setCredentials } from '../redux/auth/authSlice';
+import { logOut, setCredentials } from '../redux/auth/authSlice';
 import { API_BASE_URL } from '../util/config';
 import { getToken, setToken } from '../util/localStorage';
+
 
 const baseQuery = fetchBaseQuery({
     baseUrl: API_BASE_URL,
@@ -19,11 +19,16 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
+    // Initial API request
     let result = await baseQuery(args, api, extraOptions);
 
-    console.log('result?.success', result?.data?.success)
+    // Check if the request failed (e.g., token expired or unauthorized)
+
+    console.log("!result?.data?.success", !result?.data?.success)
     if (!result?.data?.success) {
-        console.log("baseApi is being defined...");
+        console.log("Token expired. Attempting to refresh token...");
+
+        // Attempt to refresh the token
         const refreshResult = await baseQuery(
             {
                 url: '/auth/refresh-token',
@@ -33,19 +38,28 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
             extraOptions
         );
 
-        if (refreshResult.data) {
-            const { accessToken } = refreshResult.data;
-            console.log(refreshResult.data)
-            setToken(accessToken)
-            // api.dispatch(setCredentials({ accessToken }));
+        if (refreshResult?.data?.success) {
+            console.log("Token refreshed successfully");
+
+            // Extract and save the new token
+            const { accessToken, user } = refreshResult.data;
+            setToken(accessToken); // Save token to localStorage
+            // api.dispatch(setCredentials({ accessToken, user })); // Update Redux state
+
+            // Retry the original request with the new token
             result = await baseQuery(args, api, extraOptions);
         } else {
-            // api.dispatch(logOut());
+            console.log("Token refresh failed. Logging out...");
+            api.dispatch(logOut());
+            // clearToken(); // Clear token from localStorage
         }
     }
 
+
+
     return result;
 };
+
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
