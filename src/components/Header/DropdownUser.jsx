@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 const DropdownUser = ({ logo, owner_name, company_name }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logOutUser, { data, isLoading, isError, error }] = useLogoutMutation();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,9 +25,12 @@ const DropdownUser = ({ logo, owner_name, company_name }) => {
       }
     );
 
-    console.log("responce?.data", response)
+    // console.log("responce?.data", response)
 
-    if (response?.data?.statusCode === 204) navigate('/login');
+    // if (response?.data?.statusCode === 204){
+
+    //   navigate('/login');
+    // } 
     // console.log("responce", responce)
   };
 

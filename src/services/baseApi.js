@@ -21,13 +21,10 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     // Initial API request
     let result = await baseQuery(args, api, extraOptions);
-
     // Check if the request failed (e.g., token expired or unauthorized)
-
     console.log("!result?.data?.success", !result?.data?.success)
     if (!result?.data?.success) {
         console.log("Token expired. Attempting to refresh token...");
-
         // Attempt to refresh the token
         const refreshResult = await baseQuery(
             {
@@ -40,23 +37,18 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
         if (refreshResult?.data?.success) {
             console.log("Token refreshed successfully");
-
             // Extract and save the new token
             const { accessToken, user } = refreshResult.data;
             setToken(accessToken); // Save token to localStorage
             // api.dispatch(setCredentials({ accessToken, user })); // Update Redux state
-
             // Retry the original request with the new token
             result = await baseQuery(args, api, extraOptions);
         } else {
             console.log("Token refresh failed. Logging out...");
-            api.dispatch(logOut());
+            // api.dispatch(logOut());
             // clearToken(); // Clear token from localStorage
         }
     }
-
-
-
     return result;
 };
 

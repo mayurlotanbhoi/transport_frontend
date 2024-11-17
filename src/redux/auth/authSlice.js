@@ -3,21 +3,26 @@ import { createSlice } from '@reduxjs/toolkit';
 // import { authApi } from '../../services/auth-service';
 
 
-const initialState = { user: null, accessToken: null, isLogin: false }
+const initialState = {
+    user: {},
+    accessToken: "",
+    isLogin: false
+}
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         setCredentials: (state, action) => {
-            const { access_token, user } = action.payload;
-            state.accessToken = access_token;
-            state.user = user || null;
-            state.isLogin = access_token || false
+            const { accessToken, user } = action.payload;
+            console.log()
+            state.accessToken = accessToken || "";
+            state.user = user || {};
+            state.isLogin = accessToken ? true : false
         },
         logOut: (state) => {
-            state.accessToken = null;
-            state.user = null;
+            state.accessToken = "";
+            state.user = {};
             state.isLogin = false
         },
     },

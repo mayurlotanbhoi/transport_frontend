@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense, useLayoutEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,38 +11,53 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import { PublicHeader } from './pages/Landing/componats/Header.componats';
 import DefaultLayout from './layout/DefaultLayout';
-import { useCheckTokenOnRefresh } from './pages/Authentication/useCheckTokenOnRefresh';
 import { useReAuthQuery } from './services/auth-service';
-import { setCredentials } from './redux/auth/authSlice';
+import { logOut, setCredentials } from './redux/auth/authSlice';
 // import { PublicHeader } from "./pages/Landing/componats/Header.componats.jsx"
 
 function App() {
   const { data: authResponse, isLoading, error, refetch } = useReAuthQuery();
+  // const [isAuthenticated, setisAuthenticated] = useState(false)
   const isAuthenticated = useSelector((state) => state.auth.isLogin);
+  // const isLogin = useSelector((state) => state.auth.isLogin);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // console.log('isLoading', isLoading)
+  // console.log("isAuthenticated", isAuthenticated)
+
+  // useLayoutEffect(() => {
+  //   setisAuthenticated(isLogin)
+  // }, [authResponse, isLoading, error, isLogin])
+  // useEffect(() => {
+  //   window.location.reload();
+  // }, [])
+
 
   useEffect(() => {
     // When data is fetched, handle authentication status
-    if (!isLoading && authResponse) {
-      console.log("authResponse.success", authResponse.success)
-      if (authResponse.success) {
+    console.log("authResponse.success", authResponse?.success)
+    console.log("authResponse", authResponse)
+    if (!isLoading && authResponse?.success) {
+      if (authResponse?.success) {
         const { accessToken, user } = authResponse.data;
+        console.log("accessToken, user", accessToken, user)
         dispatch(setCredentials({ accessToken, user }));
+        console.log("isAuthenticated app", isAuthenticated)
         navigate('/dashboard')
       } else {
         dispatch(logOut());
-        navigate('/auth/signin');
+        navigate('/');
       }
     }
 
     if (error) {
       console.error("ReAuth error:", error);
       dispatch(logOut());
-      navigate('/auth/signin');
+      navigate('/');
     }
-  }, [authResponse, isLoading, error,]);
+
+  }, [authResponse, isLoading, error]);
 
   useEffect(() => {
     // Scroll to top on location change
@@ -54,6 +69,12 @@ function App() {
   }
 
 
+
+
+
+
+
+
   const renderRoutes = (routesArray) => {
     return routesArray.map((route, index) => {
       // Handle routes with children (nested routes)
@@ -63,7 +84,7 @@ function App() {
             {route.protected ? (
               <>
 
-                <ProtectedRoute roles={route.roles}>
+                <ProtectedRoute roles={route.roles} >
                   {renderRoutes(route.children)}
                 </ProtectedRoute>
 
@@ -80,7 +101,7 @@ function App() {
         <>
           {/* <Header /> */}
           <DefaultLayout >
-            <ProtectedRoute roles={route.roles}>
+            <ProtectedRoute roles={route.roles} >
               <PageTitle title={route.title} />
               {route.element}
             </ProtectedRoute>
@@ -101,8 +122,6 @@ function App() {
 
   return (
     <Suspense fallback={<Loader />}>
-
-
       <Routes>
         {renderRoutes(routes)}
         {/* Redirect to login if not authenticated */}

@@ -28,25 +28,35 @@ const SignIn = () => {
 
 
     const handleFormSubmission = async (formData) => {
-      const responce = await handleRequest(
-        () => login(formData),  // The API call function
-        {
-          loadingMessage: "Logging in......",
-          successMessage: "login successfull",
-          errorMessage: "There was an issue with your Logging. Please try again later."
+      try {
+        const response = await handleRequest(
+          () => login(formData), // The API call function
+          {
+            loadingMessage: "Logging in......",
+            successMessage: "Login successful!",
+            errorMessage: "There was an issue with your login. Please try again later.",
+          }
+        );
+
+        // Check if the response is successful
+        if (response?.data?.statusCode === 200 && response?.data?.success === true) {
+          const { accessToken, user } = response?.data?.data;
+          console.log("calling", user, accessToken)
+
+          // Set token in storage or context
+          setToken(accessToken);
+          // Update Redux state with user data
+          dispatch(setCredentials({ accessToken, user }));
+          // Navigate to the dashboard
+          navigate('/dashboard');
+        } else {
+          console.error("Login failed:", response?.data?.message);
         }
-      );
-
-      console.log("responce?.data", responce?.data?.data)
-
-      if (responce?.data?.statusCode === 200 && responce?.data?.success === true)
-        // accessToken
-        setToken(responce?.data?.data?.accessToken)
-      // console.log("accessToken", responce?.data?.data?.accessToken)
-      dispatch(setCredentials(responce?.data?.data));
-      navigate('/dashboard')
-      // console.log("responce", responce)
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
     };
+
 
     handleFormSubmission(formData)
 

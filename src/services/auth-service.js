@@ -4,9 +4,8 @@ import { baseApi } from './baseApi';
 
 
 export const authApi = baseApi.injectEndpoints({
-
-
     endpoints: (builder) => ({
+        // Login Mutation
         login: builder.mutation({
             query: (credentials) => ({
                 url: '/auth/login',
@@ -15,6 +14,7 @@ export const authApi = baseApi.injectEndpoints({
             }),
         }),
 
+        // Register Mutation
         register: builder.mutation({
             query: (data) => ({
                 url: '/user/register',
@@ -22,42 +22,69 @@ export const authApi = baseApi.injectEndpoints({
                 body: data,
             }),
         }),
+
+        // Refresh Token Mutation
         refreshToken: builder.mutation({
             query: () => ({
                 url: '/auth/refresh-token',
                 method: 'POST',
+                credentials: 'include', // Ensures cookies are sent
             }),
+
         }),
 
+        // Re-authentication Query
         reAuth: builder.query({
             query: () => ({
                 url: '/auth/re-auth',
                 method: 'GET',
+                credentials: 'include', // Include credentials for cookies
             }),
+            refetchOnReconnect: true,    // Retry on reconnect
+            refetchOnFocus: true,
+            // keepUnusedDataFor: 60,
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    console.log('queryFulfilled', queryFulfilled)
+                    await queryFulfilled;
+                } catch (error) {
+                    console.error('Re-authentication failed:', error);
+                    // Handle error or dispatch actions as needed
+                }
+            },
         }),
 
+        // Logout Mutation
         logout: builder.mutation({
             query: () => ({
                 url: '/auth/logout',
                 method: 'POST',
+                credentials: 'include', // Ensure session-related cookies are sent
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
-                    // dispatch(logOut());
-                } catch {
-                    // Handle errors if needed
+                    // Perform logout cleanup actions, e.g., dispatch(logOut())
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                    // Handle errors gracefully
                 }
             },
         }),
+
+        // Protected Route Query
         getProtected: builder.query({
-            query: () => '/protected',
+            query: () => ({
+                url: '/protected',
+                method: 'GET',
+                credentials: 'include',
+            }),
         }),
     }),
     overrideExisting: false,
 });
 
-
+// Export Hooks
 export const {
     useLoginMutation,
     useRegisterMutation,
@@ -66,6 +93,7 @@ export const {
     useLogoutMutation,
     useGetProtectedQuery,
 } = authApi;
+
 
 // import { baseApi } from './baseApi';
 

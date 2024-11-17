@@ -7,13 +7,13 @@ import { useSelector } from 'react-redux';
 export default function UserRout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   // const [isAuthenticated, SetIsAuthenticate] = useState<boolean>(true);
-  const isAuthenticated = useSelector((state) => state.auth.isLogin)
+  // const isAuthenticated = useSelector((state) => state.auth.isLogin)
 
 
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" />
-  }
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/" />
+  // }
 
   return (
 

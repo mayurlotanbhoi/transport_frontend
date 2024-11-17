@@ -11,8 +11,7 @@ const Header = ({
   sidebarOpen,
   setSidebarOpen,
 }) => {
-  const { logo, company_name, owner_name } = useSelector((state) => state?.auth?.user)
-  // const { logo, company_name, owner_name } = user
+  const { logo = "", company_name = "", owner_name = "" } = useSelector((state) => state?.auth?.user || {});  // const { logo, company_name, owner_name } = user
 
   // Add a condition to check if data is available
   if (!logo || !company_name || !owner_name) {

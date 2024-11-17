@@ -57,7 +57,6 @@ export default function RunningStatus() {
     //     return Math.min(Math.max(progress, 0), 100);
     // };
 
-
     const { data: LorryRunningStatus, isLoading, error, refetch } = useGetTripsQuery();
 
     // Retry fetching on mount if there is an error
