@@ -22,6 +22,7 @@ export const partyApi = baseApi.injectEndpoints({
             providesTags: [{ type: 'Party', id: 'LIST' }],
             refetchOnReconnect: true,    // Retry on reconnect
             refetchOnFocus: true,
+            retry: 3,
             async onQueryStarted(args, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled; // Wait for the query to resolve

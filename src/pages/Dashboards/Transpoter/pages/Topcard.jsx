@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { useGetTripsQuery } from '../../../../services/trip_history.service';
 
 const Topcard = ({ partiess, vehicles }) => {
-    const { logo, company_name, owner_name } = useSelector((state) => state?.auth?.user)
+    const { logo = "", company_name = "", owner_name = "" } = useSelector((state) => state?.auth?.user || {});  // const { logo, company_name, owner_name } = user
     const { data: trips, isLoading, error, refetch } = useGetTripsQuery();
 
     const Earnings = trips && trips.length > 0

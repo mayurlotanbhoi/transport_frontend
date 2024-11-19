@@ -13,6 +13,7 @@ import persistStore from 'redux-persist/es/persistStore';
 import { baseApi } from './services/baseApi';
 import { decryptData, encryptData } from './util/encryptData';
 import { partyApi } from './services/party.services';
+import { userApi } from './services/user.service';
 
 
 // Define the persistence configuration for auth and vehicle slices
@@ -64,6 +65,8 @@ const rootReducer = combineReducers({
     vehicle: persistReducer(vehiclePersistConfig, vehicleSlice), // Persisted vehicle reducer
     party: persistReducer(partyPersistConfig, partiesSlice), // Persisted vehicle reducer
 
+
+    [userApi.reducerPath]: userApi.reducer,
     [vehicleApi.reducerPath]: vehicleApi.reducer,
     [tripHistoryApi.reducerPath]: tripHistoryApi.reducer,
     [partyApi.reducerPath]: partyApi.reducer,

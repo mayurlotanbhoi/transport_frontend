@@ -3,15 +3,146 @@ import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import CoverOne from '../images/cover/cover-01.png';
 import userSix from '../images/user/user-06.png';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Modal } from '../components/popups/Modal';
+import { FaEdit, FaTruck, FaTruckMoving, FaUserEdit } from 'react-icons/fa';
+import { handleRequest } from '../util/handleRequest';
+import { useUpdateAvatarMutation, useUpdateLogoMutation } from '../services/user.service';
+import { useGetTripsQuery } from '../services/trip_history.service';
+import { calculateProgress } from './Dashboards/Transpoter/pages/TripHistory';
+import { MdEmojiTransportation } from 'react-icons/md';
+import { FaPersonRunning } from 'react-icons/fa6';
 
 const Profile = () => {
+  const [logoUpload, setLogo] = useState(null)
+  const [avatarUpload, setAvatar] = useState(null)
+  const [preview, setPreview] = useState(null);
+  const [uploadFileName, setUploadFileName] = useState(null);
+  const [updateLogo, { data: logoData, isLoading: logoLoading, isError: logoError, isSuccess: logoSuccess }] = useUpdateLogoMutation();
+  const [updateAvatar, { data: AvatarData, isLoading: AvatarLoading, isError: AvatarError, isSuccess: AvatarSuccess }] = useUpdateAvatarMutation();
+  const { logo, avatar, description, email, mobile_number, owner_name, company_name, owner_name: transport, city: transpoterCity, route, user_code } = useSelector((state) => state.auth.user || {})
 
-  const { logo, avatar, description, email, mobile_number, owner_name, company_name, owner_name: transport, city: transpoterCity, route, user_code } = useSelector((state) => state.auth.user)
+  const { error: vehicleError, loading, vehicles } = useSelector(vehicle => vehicle.vehicle)
+  const { error: partieError, loading: partieLading, partiess } = useSelector(party => party.party)
+  const { data: trips, isLoading, error, refetch } = useGetTripsQuery();
 
+  const Earnings = trips && trips.length > 0
+    ? trips.reduce((total, trip) => total + (trip?.freigth || 0), 0)
+    : 0;
+
+  const runningVehicles = vehicles && vehicles.length > 0
+    ? vehicles.reduce((total, vehicle) => {
+      console.log(vehicle?.trip_start_date, vehicle?.speed_per_hr, vehicle?.distance_km)
+      const progress = calculateProgress(vehicle?.trip_start_date, vehicle?.speed_per_hr, vehicle?.distance_km);
+      return progress.toFixed(2) < 100 ? total + 1 : total;
+    }, 0)
+    : 0;
+  // const reader = new FileReader();
+  const handleFileChange = (e) => {
+    // Get the selected file from the input element
+    const file = e.target.files[0];
+    const name = e.target.name
+    setUploadFileName(name)
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreview(e.target.result); // Set the preview URL
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL
+
+      if (name === 'logo') {
+        setLogo(file);
+      } else if (name === 'avatar') {
+        setAvatar(file)
+      }
+
+    }
+
+  };
+
+  const onSubmit = async () => {
+    const formData = new FormData();
+
+    // for (const key in data) {
+    //   if (key === 'logo') {
+    //     formData.append(key, data[key][0]); // Assuming `data[key]` is a FileList
+    //   } else if (key === 'city') {
+    //     formData.append(key, JSON.stringify(data[key])); // Convert city object to JSON
+    //   } else {
+    //     formData.append(key, data[key]);
+    //   }
+    // }
+
+    if (uploadFileName === 'logo') {
+      formData.append('logo', logoUpload); // Assuming `data[key]` is a FileList
+    } else if (uploadFileName === 'avatar') {
+      formData.append('avatar', avatarUpload); // Assuming `data[key]` is a FileList
+    }
+
+    const handleUbdateLogo = async () => {
+      await handleRequest(
+        () => updateLogo(formData),  // The API call function
+        {
+          loadingMessage: "Updating  your Logo...",
+          successMessage: "Your Updating has been completed. ",
+          errorMessage: "There was an issue with your Logo Update. Please try again later."
+        }
+      );
+    };
+
+    const handleUbdateAvatar = async () => {
+      await handleRequest(
+        () => updateAvatar(formData),  // The API call function
+        {
+          loadingMessage: "Updating  your Profile Photo...",
+          successMessage: "Your Updating has been completed. ",
+          errorMessage: "There was an issue with your Profile Photo Update. Please try again later."
+        }
+      );
+    };
+
+    if (uploadFileName === 'logo') {
+      handleUbdateLogo()
+    } else if (uploadFileName === 'avatar') {
+      handleUbdateAvatar()
+    }
+
+  };
+
+
+
+  const onClose = () => setPreview(null);
   return (
     <>
-      <Breadcrumb pageName="Profile" />
 
+      <Modal isOpen={preview} onClose={onClose}>
+        <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+          Upload Logo,Banner,Visiting card,
+        </h2>
+
+        <div className="min:max-w-sm flex flex-col items-center justify-center">
+
+          {preview ? (
+            <img
+              src={preview}
+              alt="Logo Preview"
+              className="w-50 h-auto rounded-lg"
+            />
+          ) : (
+            <p className="text-gray-500">No image selected</p>
+          )}
+
+          <Link
+            to="#"
+            onClick={onSubmit}
+            className="inline-flex rounded-lg items-center justify-center gap-2.5 bg-primary py-2 mt-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+          >
+            <FaUserEdit />
+            Update
+          </Link>
+        </div>
+      </Modal>
+      <Breadcrumb pageName="Profile" />
       <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="relative z-20 h-35 md:h-65">
           <img
@@ -24,7 +155,8 @@ const Profile = () => {
               htmlFor="cover"
               className="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary py-1 px-2 text-sm font-medium text-white hover:bg-opacity-90 xsm:px-4"
             >
-              <input type="file" name="cover" id="cover" className="sr-only" />
+              <input type="file" onChange={handleFileChange} name="logo" id="cover"
+                className="sr-only" />
               <span>
                 <svg
                   className="fill-current"
@@ -83,9 +215,10 @@ const Profile = () => {
                 </svg>
                 <input
                   type="file"
-                  name="profile"
+                  name="avatar"
                   id="profile"
                   className="sr-only"
+                  onChange={handleFileChange}
                 />
               </label>
             </div>
@@ -95,8 +228,8 @@ const Profile = () => {
               {owner_name}
             </h3>
             <p className="font-medium">{company_name}</p>
-            <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
-              <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
+            {/* <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]"> */}
+            {/* <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
                 <span className="font-semibold text-black dark:text-white">
                   259
                 </span>
@@ -113,8 +246,44 @@ const Profile = () => {
                   2K
                 </span>
                 <span className="text-sm">Following</span>
-              </div>
+              </div> */}
+
+            {/* <div className='w-full  flex flex-col   gap-4'> */}
+            <div className="mx-auto my-4 max-w-94  flex gap-4 px-2 justify-between">
+              {[
+                {
+                  icon: <FaPersonRunning />,
+                  count: runningVehicles || 0,
+                  label: "Running",
+                },
+                {
+                  icon: <FaTruckMoving />,
+                  count: vehicles?.length || 0,
+                  label: "Vehicles",
+                },
+                {
+                  icon: <MdEmojiTransportation />,
+                  count: partiess?.length || 0,
+                  label: "Parties",
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center bg-white w-40 px-4 py-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
+                  <figure className="text-xl font-bold text-black flex items-center gap-2">
+                    {item.icon} {item.count}
+                  </figure>
+                  <small className="text-gray-600 text-base font-satoshi ">{item.label}</small>
+                </div>
+
+              ))}
+
             </div>
+
+            {/* </div> */}
+
+            {/* </div> */}
 
             <div className="mx-auto max-w-180">
               <h4 className="font-semibold text-black dark:text-white">

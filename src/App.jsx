@@ -13,6 +13,7 @@ import { PublicHeader } from './pages/Landing/componats/Header.componats';
 import DefaultLayout from './layout/DefaultLayout';
 import { useReAuthQuery } from './services/auth-service';
 import { logOut, setCredentials } from './redux/auth/authSlice';
+import { setToken } from './util/localStorage';
 // import { PublicHeader } from "./pages/Landing/componats/Header.componats.jsx"
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         const { accessToken, user } = authResponse.data;
         console.log("accessToken, user", accessToken, user)
         dispatch(setCredentials({ accessToken, user }));
+        setToken(accessToken)
         console.log("isAuthenticated app", isAuthenticated)
         navigate('/dashboard')
       } else {

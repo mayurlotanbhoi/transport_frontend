@@ -42,6 +42,8 @@ export const authApi = baseApi.injectEndpoints({
             }),
             refetchOnReconnect: true,    // Retry on reconnect
             refetchOnFocus: true,
+            retry: 3,
+            providesTags: ['user'],
             // keepUnusedDataFor: 60,
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {

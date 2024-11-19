@@ -12,6 +12,7 @@ export const pancesHistoryApi = baseApi.injectEndpoints({
             refetchOnReconnect: true,    // Retry on reconnect
             refetchOnFocus: true,        // Retry when the component regains focus
             // keepUnusedDataFor: 60,       // Keep data for 60 seconds before refetching
+            retry: 3,
         })
     }),
 
