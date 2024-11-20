@@ -19,6 +19,7 @@
     "apexcharts": "^3.41.0",
     "crypto-js": "^4.2.0",
     "flatpickr": "^4.6.13",
+    "framer-motion": "^11.11.17",
     "headlessui": "^0.0.0",
     "html2canvas": "^1.4.1",
     "jsvectormap": "^1.5.3",

@@ -4,7 +4,6 @@ import { baseApi } from './baseApi';
 
 export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-
         updateLogo: builder.mutation({
             query: (data) => ({
                 url: '/user/update-logo', // Corrected spelling of 'vehicle'

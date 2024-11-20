@@ -2,8 +2,9 @@
 
 import { Dialog, DialogPanel, Disclosure, DisclosureButton, DisclosurePanel, Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/react'
 import { useState } from 'react'
-import { isCompositeComponent } from 'react-dom/test-utils'
+// import { isCompositeComponent } from 'react-dom/test-utils'
 import { Link } from 'react-router-dom'
+import { AllInOneLogoHeader } from '../../../components/Logo/Logo'
 
 
 const products = [
@@ -21,14 +22,18 @@ const callsToAction = [
 export const PublicHeader = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     return (
-        <header className=" bg-white">
+        <header className=" bg-white  ">
             <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-                <div className="flex lg:flex-1">
-                    <Link to="#" className="-m-1.5 p-1.5">
-                        <span className="sr-only">Your Company</span>
-                        <img alt="" src="https://tempfile.aiquickdraw.com/i/in2WG2bQRjKwlyTpzzMJdg.jpg" className="h-8 w-auto" />
-                    </Link>
-                </div>
+
+                {/* <Link to="#" className="-m-1.5 p-1.5"> */}
+                {/* <span className="sr-only">Your Company</span> */}
+                <Link className=" " to="/">
+                    {/* <img src={LogoIcon} alt="Logo" /> */}
+                    <AllInOneLogoHeader />
+                </Link>
+                {/* <img alt="" src="https://tempfile.aiquickdraw.com/i/in2WG2bQRjKwlyTpzzMJdg.jpg" className="h-8 w-auto" /> */}
+                {/* </Link> */}
+
                 <div className="flex lg:hidden">
                     <button
                         type="button"

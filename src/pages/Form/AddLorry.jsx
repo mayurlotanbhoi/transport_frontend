@@ -75,9 +75,7 @@ export default function AddLorry() {
         }
       );
     };
-
     handleFormSubmission()
-
   };
   // const handleRegister = (vehicleData) => {
   //   registerVehicle(vehicleData)

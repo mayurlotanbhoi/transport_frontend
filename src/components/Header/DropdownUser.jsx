@@ -4,8 +4,9 @@ import ClickOutside from '../ClickOutside';
 import UserOne from '../../images/user/user-01.png';
 import { useLogoutMutation } from '../../services/auth-service';
 import { handleRequest } from '../../util/handleRequest';
-import { logOut } from '../../redux/auth/authSlice';
+import { logOut, setCredentials } from '../../redux/auth/authSlice';
 import { useDispatch } from 'react-redux';
+import { clearToken } from '../../util/localStorage';
 
 const DropdownUser = ({ logo, owner_name, company_name }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -24,6 +25,13 @@ const DropdownUser = ({ logo, owner_name, company_name }) => {
         errorMessage: "There was an issue with your Logging out. Please try again later."
       }
     );
+
+    console.log("logout response", response)
+    if (response?.data?.statusCode === 200 && response?.data?.success) {
+      dispatch(setCredentials({ accessToken: null, user: {} })); // Clear Redux store
+      clearToken(); // Clear token from storage
+      navigate('/'); // Navigate to root
+    }
 
     // console.log("responce?.data", response)
 

@@ -1,9 +1,12 @@
 
 // import { logOut } from '../redux/auth/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { setCredentials } from '../redux/auth/authSlice';
 import { baseApi } from './baseApi';
 
 
 export const authApi = baseApi.injectEndpoints({
+
     endpoints: (builder) => ({
         // Login Mutation
         login: builder.mutation({
@@ -61,11 +64,22 @@ export const authApi = baseApi.injectEndpoints({
             query: () => ({
                 url: '/auth/logout',
                 method: 'POST',
-                credentials: 'include', // Ensure session-related cookies are sent
+                credentials: 'include', // Include credentials for cookies
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    await queryFulfilled;
+                    // await queryFulfilled;
+
+                    const isLogOut = await queryFulfilled;
+                    console.log("isLogOut", isLogOut)
+                    // if (isLogOut?.data?.statusCode === 200 && isLogOut?.data?.success) {
+                    //     dispatch(setCredentials({ accessToken: null, user: {} }))
+                    //     clearToken()
+                    //     const navigate = useNavigate();
+                    //     // const { accessToken, user }
+                    //     navigate('/')
+
+                    // }
                     // Perform logout cleanup actions, e.g., dispatch(logOut())
                 } catch (error) {
                     console.error('Logout failed:', error);
