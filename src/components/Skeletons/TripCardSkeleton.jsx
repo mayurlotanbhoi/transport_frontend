@@ -7,7 +7,7 @@ const TripCardSkeleton = () => {
     return (
         <div
 
-            className={` mx-auto w-full sm:max-w-[23rem]  bg-white shadow-md rounded-lg p-4 my-2 transition-all duration-700 ease-in-out  max-h-[150px] overflow-hidden
+            className={` mx-auto w-full sm:max-w-[20rem]  bg-white shadow-md rounded-lg p-4 my-2 transition-all duration-700 ease-in-out  max-h-[150px] overflow-hidden
                 }`}
         >
             {/* Header Section */}

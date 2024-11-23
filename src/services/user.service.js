@@ -51,6 +51,30 @@ export const userApi = baseApi.injectEndpoints({
         }),
 
 
+        updateUserInfo: builder.mutation({
+            query: (data) => ({
+                url: '/user/update-user-info', // Corrected spelling of 'vehicle'
+                method: 'PUT',
+                body: data,
+            }),
+
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    const isupdate = await queryFulfilled;
+                    console.log("isupdate", isupdate)
+                    if (isupdate?.data?.statusCode && isupdate?.data?.success) {
+                        dispatch(setOnlyUseData({ user: isupdate?.data?.data }))
+                    }
+                    // Perform logout cleanup actions, e.g., dispatch(logOut())
+                } catch (error) {
+                    console.error('update User Info fail:', error);
+                    // Handle errors gracefully
+                }
+            },
+            // invalidatesTags: ['user'],
+        }),
+
+
         // Register vehicle mutation
         // registerVehicle: builder.mutation({
         //     query: (data) => ({
@@ -82,4 +106,4 @@ export const userApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useUpdateLogoMutation, useUpdateAvatarMutation } = userApi;
+export const { useUpdateLogoMutation, useUpdateAvatarMutation, useUpdateUserInfoMutation } = userApi;

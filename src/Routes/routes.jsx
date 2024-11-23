@@ -10,7 +10,7 @@ import Profile from '../pages/Profile.jsx';
 import FormElements from '../pages/Form/FormElements.tsx';
 import FormLayout from '../pages/Form/FormLayout.tsx';
 import Tables from '../pages/Tables.tsx';
-import Settings from '../pages/Settings.tsx';
+import Settings from '../pages/Settings.jsx';
 import Chart from '../pages/Chart.tsx';
 import Alerts from '../pages/UiElements/Alerts.tsx';
 import Buttons from '../pages/UiElements/Buttons.tsx';

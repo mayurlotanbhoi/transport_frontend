@@ -18,6 +18,7 @@ import { Field } from '@headlessui/react';
 import { TrukErrorDialog, TrukLoaderMoveForword, TrukProcessDialog } from '../../components/loaders/truck_move_forword';
 import { handleRequest } from '../../util/handleRequest';
 import { CITY_API } from '../../util/config';
+import { AllInOneLogo } from '../../components/Logo/Logo';
 
 const { Logo, appName } = appInfo
 const SignUp = () => {
@@ -105,12 +106,12 @@ const SignUp = () => {
             <div className="py-17.5 px-26 text-center">
               <Link className="mb-5.5 inline-block" to="/">
                 {/* <img className="hidden dark:block" src={Logo} alt="Logo" /> */}
+                {/* <h1 className=' text-2xl'>TransBook</h1> */}
+                <AllInOneLogo />
                 {/* <img className="dark:hidden" src={LogoDark} alt="Logo" /> */}
-                <h1 className=' text-black font-extralight text-3xl' >TransPort</h1>
               </Link>
               <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
+                Streamlining Transport, Empowering Growth
               </p>
 
               <span className="mt-15 inline-block">
@@ -501,7 +502,7 @@ const SignUp = () => {
                       message: "Address be greater than 10 letter"
                     },
                     maxLength: {
-                      value: 200,
+                      value: 2000,
                       message: "Address should be less than 200 letter"
                     }
                   })}

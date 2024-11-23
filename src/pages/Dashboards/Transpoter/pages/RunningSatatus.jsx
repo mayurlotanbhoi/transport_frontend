@@ -73,7 +73,7 @@ export default function RunningStatus() {
 
     if (isLoading) {
         return (
-            <div className=' w-full flex justify-start flex-wrap'>
+            <div className=' w-screen sm:max-w-[20rem]'>
                 {new Array(10).fill(null).map((_, index) => (
                     <TripCardSkeleton key={index} />
                 ))}
@@ -88,8 +88,8 @@ export default function RunningStatus() {
                 <h2 className="text-2xl font-semibold mb-5">Running Status</h2>
                 <Link to={'/dashboard/trips'} className=' text-primary font-bold '>View All</Link>
             </div>
-
             <TripsHistory trips={LorryRunningStatus} />
+
 
         </div>
     );

@@ -61,13 +61,12 @@ export default function MenuCard() {
     ]
     return (
         <div className='col-span-12 xl:col-span-8 bg-white dark:bg-black dark:text-white rounded-xl p-5    shadow-md overflow-hidden'>
-            <div className=' w-full flex-wrap gap-10 text-center flex justify-between items-center'>
+            <div className=' w-full flex-wrap gap-x-8  sm:gap-10 text-center flex justify-between items-center'>
                 {menuLinks.map((item, index) => (
 
-                    <Link key={index} to={'/dashboard' + item.path} className=' w-10 flex flex-col items-center'>
+                    <Link key={index} to={'/dashboard' + item.path} className=' w-10 h-20 flex flex-col items-center'>
                         <span className='primary-color rounded-lg p-2 font-semibold ' >{item.icon}</span>
-                        <text className=" text-black capitalize dark:text-white">{item.name}</text>
-
+                        <span className=" text-black text-sm capitalize dark:text-white">{item.name}</span>
                     </Link>
 
                 ))}

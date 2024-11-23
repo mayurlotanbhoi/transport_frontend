@@ -61,7 +61,7 @@ export default function Trips() {
 
     if (isLoading) {
         return (
-            <div className=' w-full flex justify-start flex-wrap'>
+            <div className=' w-screen sm:max-w-[20rem]'>
                 {new Array(10).fill(null).map((_, index) => (
                     <TripCardSkeleton key={index} />
                 ))}
